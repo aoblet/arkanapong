@@ -14,14 +14,11 @@ typedef struct Joueur{
 	char prenom [CAR_MAX];
 	int vie;
 	Barre * barre;
-	Balle * balle;
 }Joueur;
 
-Joueur initJoueur(char * nom, char * prenom, int vie, Barre * barre, Balle * balle);
+Joueur initJoueur(char * nom, char * prenom, int vie, Barre * barre);
 Barre * getBarre(Joueur * joueur);
-Balle * getBalle(Joueur * joueur);
-void setBalle(Joueur * joueur, Balle * b);
 void setBarre(Joueur * joueur, Barre * b);
-void handleBarreIAJ2(Joueur *j1, Joueur * j2, float ordonneRepereMax);
+void handleBarreIAJ2(Balle * balle_j1, Balle * balle_j2, Joueur * j1, Joueur * j2, float ordonneRepereMax);
 
 #endif

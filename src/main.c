@@ -39,6 +39,9 @@ void setVideoMode() {
 
 
 int main(int argc, char * argv []){
+	freopen("CON", "w", stdout);
+  	freopen("CON", "r", stdin);
+  	freopen("CON", "w", stderr);
 
 	if(SDL_Init(SDL_INIT_VIDEO)==-1) {
 		fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
@@ -49,20 +52,32 @@ int main(int argc, char * argv []){
   	SDL_WM_SetCaption("Arkana", NULL);
 
   	GLuint textureScreen;
-  	genereWallpaper(&textureScreen);
+  	genereWallpaper(&textureScreen,"../img/screen/wallpaper2.jpg");
 
-  	Balle balle_joueur1 = initBalle(0,-170,0,0,5,151,187,205);
   	Barre barre_joueur1 = initBarre(0,0,60,5,2,151,187,205);
-  	Joueur j1 = initJoueur("Alexis","Oblet",20,&barre_joueur1,&balle_joueur1);
+  	Joueur j1 = initJoueur("Alexis","Oblet",20,&barre_joueur1);
+  	Balle balle_joueur1 = initBalle(0,-170,0,0,5,151,187,205,&j1);
 
-  	Balle balle_joueur2 = initBalle(0,170,0,0,5,255,204,0);
   	Barre barre_joueur2 = initBarre(0,0,60,5,2,255,204,0);
-  	Joueur j2 = initJoueur("Machine","Invincible",20,&barre_joueur2,&balle_joueur2);
+  	Joueur j2 = initJoueur("Machine","Invincible",20,&barre_joueur2);
+  	Balle balle_joueur2 = initBalle(0,170,0,0,5,255,204,0,&j2);
+
 
   	setBarresToBalle(&balle_joueur1, &barre_joueur1,&barre_joueur2);
   	setBarresToBalle(&balle_joueur2, &barre_joueur1,&barre_joueur2);
 	
 	initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
+
+
+
+	/********* INIT BRIQUES *************/
+	Brique *** arrayBrique = NULL;
+	printf("Briques adr avant %p\n",arrayBrique );
+	int nbBriquesX, nbBriquesY;
+	Balle * balles[2]={&balle_joueur1,&balle_joueur2};
+	loadLevelBriques("classique",&arrayBrique,*balles,&nbBriquesX,&nbBriquesY,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
+	printf("Briques adr apres %p\n",arrayBrique );
+
 
   	int loop=1;
   	int partie_stopped=1;
@@ -79,8 +94,11 @@ int main(int argc, char * argv []){
 
 	    dessinBalle(&balle_joueur1,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
 	    dessinBalle(&balle_joueur2,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
-	    dessinBarre(&barre_joueur1);
+	   	dessinBarre(&barre_joueur1);
 	    dessinBarre(&barre_joueur2);
+
+	    dessinBriques(arrayBrique,nbBriquesX,nbBriquesY);
+
 	    SDL_GL_SwapBuffers(); 
 	    /* fin dessin */
 
@@ -99,10 +117,16 @@ int main(int argc, char * argv []){
 		    else if(keystates[ SDLK_e])
 		    	deplacerBarreX(&barre_joueur2,-1,ABCISSE_REPERE_MAX);
 
+		    
+
+		    /*************BRIQUES ***************/
+			handleGrilleBrique(arrayBrique, balles,nbBriquesX, nbBriquesY, 2);
+
+
 
 		    /*****  IA  ******/
-		    handleBarreIAJ2( &j1, &j2, ORDONNE_REPERE_MAX);
-
+		   	handleBarreIAJ2( &balle_joueur1, &balle_joueur2, &j1, &j2, ORDONNE_REPERE_MAX);
+		   
 
 		    /****** GESTION PERTE ******/
 			int perte_potentiel_balle1 = handleBalleBorder(&balle_joueur1, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
@@ -111,7 +135,7 @@ int main(int argc, char * argv []){
 				partie_stopped = 1;
 			}
 			else if(perte_potentiel_balle1 == -2){
-				j2.vie =-1;
+				j2.vie -=1;
 				partie_stopped -= 1;
 			}
 			
@@ -129,8 +153,6 @@ int main(int argc, char * argv []){
 				stopGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2);
 			}
 		}
-
-
 	    SDL_Event e;
 	    while(SDL_PollEvent(&e)) {
 	    	if(e.type == SDL_QUIT) {
@@ -163,6 +185,10 @@ int main(int argc, char * argv []){
 	           			break;
 	      	    		
 	      	    		case SDLK_RETURN :
+	      	    		initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
+								//vitesse default balles
+								initVitesseBalles(&balle_joueur1,&balle_joueur2);
+								initVitesseBarres(&barre_joueur1,&barre_joueur2);
 		      	    		if(partie_stopped){
 								initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
 								//vitesse default balles
@@ -188,7 +214,7 @@ int main(int argc, char * argv []){
 
 			            case SDLK_DOWN:
 	          				setAcceleration(&balle_joueur1,0.5);
-	          				setAcceleration(&balle_joueur1,0.5);
+	          				setAcceleration(&balle_joueur2,0.5);
 
 			            break;
 

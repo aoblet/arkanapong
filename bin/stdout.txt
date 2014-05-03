@@ -1,3 +1,0 @@
-Vie joueur 1: 20
-Vie joueur 2: 20
-

@@ -6,6 +6,7 @@
 #define __BALLE_H__
 #include "joueur/barre.h"
 #include <GL/gl.h>
+
 typedef struct Balle {
 	float xPos;
 	float yPos;
@@ -17,11 +18,12 @@ typedef struct Balle {
 	int bleu;
 	Barre * barre_joueur_1;
 	Barre * barre_joueur_2;
+	struct Joueur * joueur;
 	GLuint texture;
 }Balle;
 
 
-Balle initBalle(float xPos, float yPos,float xVitesse,float yVitesse, float rayon, int rouge, int vert, int bleu);
+Balle initBalle(float xPos, float yPos,float xVitesse,float yVitesse, float rayon, int rouge, int vert, int bleu, struct Joueur * joueur);
 void setAcceleration(Balle * b, float vitesse);
 void setVecteurVitesse(Balle * b, float xVitesse,float yVitesse);
 void setSymetriqueVecteurVitesse(Balle * b);

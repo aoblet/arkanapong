@@ -51,14 +51,10 @@ int handleBarreBord(Barre * barre, float abcisseRepereMax){
 	if(barre != NULL){
 		if(barre->xPos + barre->xSize/2  > abcisseRepereMax){
 			barre->xPos = abcisseRepereMax-(barre->xSize/2);
-			setSizeBarre(barre,barre->xSize-10,barre->ySize);
-
 		}
 
 		if(barre->xPos - barre->xSize/2  < -abcisseRepereMax){
 			barre->xPos = -abcisseRepereMax+(barre->xSize/2);
-
-			setSizeBarre(barre,barre->xSize+10,barre->ySize);
 		}
 	}
 	return 0;
