@@ -8,6 +8,7 @@
 #include "joueur/joueur.h"
 #include "joueur/barre.h"
 #include "game/game.h"
+#include "textures/textures.h"
 
 static unsigned int WINDOW_WIDTH = 800;
 static unsigned int WINDOW_HEIGHT = 800;
@@ -51,9 +52,9 @@ int main(int argc, char * argv []){
  	setVideoMode();
   	SDL_WM_SetCaption("Arkana", NULL);
 
-  	GLuint textureScreen;
-  	genereWallpaper(&textureScreen,"../img/screen/wallpaper2.jpg");
 
+
+  	/******** INIT SCREEN & JOUEUR *******/
   	Barre barre_joueur1 = initBarre(0,0,60,5,2,151,187,205);
   	Joueur j1 = initJoueur("Alexis","Oblet",20,&barre_joueur1);
   	Balle balle_joueur1 = initBalle(0,-170,0,0,5,151,187,205,&j1);
@@ -70,13 +71,15 @@ int main(int argc, char * argv []){
 
 
 
-	/********* INIT BRIQUES *************/
+	/**********INIT GAME**************/
 	Brique ** arrayBrique = NULL;
+  	GLuint texture_wallpaper;
+  	Textures textures_briques;
 
 	int nbBriques,nbBalles = 2;
 	Balle * balles[2]={&balle_joueur1,&balle_joueur2};
+	loadGame("default", &texture_wallpaper, "classique", &arrayBrique,balles, &nbBriques, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX,&textures_briques);
 
-	loadLevelBriques("classique",&arrayBrique,balles,&nbBriques,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
 	printf("Briques adr apres %p\n",arrayBrique );
 
 
@@ -91,7 +94,7 @@ int main(int argc, char * argv []){
 	    glLoadIdentity();
 
 	    glColor3ub(255,255,255); // init
-	    dessinWallpaper(textureScreen,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
+	    dessinWallpaper(texture_wallpaper,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
 
 	    dessinBalle(&balle_joueur1,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
 	    dessinBalle(&balle_joueur2,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
@@ -121,7 +124,7 @@ int main(int argc, char * argv []){
 		    
 
 		    /*************BRIQUES ***************/
-			handleGrilleBrique(arrayBrique, nbBriques, nbBalles);
+			handleGrilleBrique(arrayBrique, nbBriques, nbBalles,textures_briques);
 
 
 
@@ -137,7 +140,7 @@ int main(int argc, char * argv []){
 			}
 			else if(perte_potentiel_balle1 == -2){
 				j2.vie -=1;
-				partie_stopped -= 1;
+				partie_stopped = 1;
 			}
 			
 			int perte_potentiel_balle2 = handleBalleBorder(&balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
@@ -154,6 +157,8 @@ int main(int argc, char * argv []){
 				stopGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2);
 			}
 		}
+
+
 	    SDL_Event e;
 	    while(SDL_PollEvent(&e)) {
 	    	if(e.type == SDL_QUIT) {
@@ -233,7 +238,7 @@ int main(int argc, char * argv []){
 	}
 
  	glBindTexture(GL_TEXTURE_2D,0);
-    glDeleteTextures(1,&textureScreen);
+    glDeleteTextures(1,&texture_wallpaper);
   	SDL_Quit(); 
 	return EXIT_SUCCESS;
 

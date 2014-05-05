@@ -1,6 +1,9 @@
 #include "game/game.h"
+#include "textures/textures.h"
 #include <SDL/SDL.h>
+#include <GL/gl.h>
 #include <SDL/SDL_image.h>
+#include <SDL/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,50 +35,6 @@ void initVitesseBarres(Barre * barrej1, Barre * barrej2){
 	setVitesseBarre(barrej2,5);
 }
 
-void genereWallpaper(GLuint * id_text, char * chemin_photo){
-	SDL_Surface * img = IMG_Load(chemin_photo);
-
-	if(img != NULL){
-	    GLenum format;
-	    switch(img->format->BytesPerPixel) {
-	    	case 1:
-	      		format = GL_RED;
-	      	break;
-	      	case 3:
-	      		/* Ne gere pas les machines big-endian (a confirmer...) */
-	      		format = GL_RGB;
-	      	break;
-	      	case 4:
-	      		/* Ne gere pas les machines big-endian (a confirmer...) */
-	     		 format = GL_RGBA;
-	      	break;
-	      	default:
-		    /* On ne traite pas les autres cas */
-		    fprintf(stderr, "Format des pixels de l'image %s non pris en charge\n", chemin_photo);
-		    exit(EXIT_FAILURE);
-		}
-
-	    glGenTextures(1,id_text);
-
-	    if(*id_text != 0){
-			glBindTexture(GL_TEXTURE_2D,*id_text);
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-
-			// GL_UNSIGNED_BYTE -> composante de couleur géré sur SDL
-			glTexImage2D( GL_TEXTURE_2D,0, GL_RGB, img->w, img->h, 0, format, GL_UNSIGNED_BYTE, img->pixels);
-			SDL_FreeSurface(img);
-	    }
-	    else{
-	    	fprintf(stderr,"probleme glGenTextures wallpaper");
-			exit(EXIT_FAILURE);
-	    }
-	}
-	else{
-		fprintf(stderr,"echec ouverture screen wallpaper");
-		exit(EXIT_FAILURE);
-	}
-}
 
 void dessinWallpaper(GLuint textureWallpaper, float abcisseRepereMax, float ordonneRepereMax ){
  	glEnable(GL_TEXTURE_2D);
@@ -99,17 +58,20 @@ void dessinWallpaper(GLuint textureWallpaper, float abcisseRepereMax, float ordo
 }
 
 
-void loadLevelBriques(char * nomlevel, Brique *** arrayBrique, Balle ** balles, int * nbBriques, float abcisseRepereMax, float ordonneRepereMax){
+void loadGame(	char * theme, GLuint * texture_wallpaper, char * nomlevel, Brique *** arrayBrique, Balle ** balles, 
+				int * nbBriques, float abcisseRepereMax, float ordonneRepereMax,Textures * textures_briques){
 	
 	GLuint texture_load;
-	genereWallpaper(&texture_load,"../img/screen/loading.jpg");
+	loadTexture(&texture_load,"../img/utils/loading.jpg");
 	dessinWallpaper(texture_load,abcisseRepereMax,ordonneRepereMax);
 	SDL_GL_SwapBuffers(); 
 
+	/***** CHARGEMENT LEVEL *******/
 	FILE * file = NULL;
 
 	if(!strcmp(nomlevel,"classique")){
 		file = fopen("../level/classique.txt","r");
+
 	}
 	else{
 		fprintf(stderr, "niveau inconnu");
@@ -121,11 +83,17 @@ void loadLevelBriques(char * nomlevel, Brique *** arrayBrique, Balle ** balles, 
 	    exit(EXIT_FAILURE);
 	}
 
+	char chemin_wallpaper [50] = "../img/themes/";
+	strcat(chemin_wallpaper,theme);
+	strcat(chemin_wallpaper,"/screen/wallpaper.jpg");
+
+	loadTexture(texture_wallpaper,chemin_wallpaper);
+	loadTexturesBriques(textures_briques,theme);
+
 	int nbBriquesYFile, nbBriquesXFile, type_brique;
 	
-
-
 	fscanf(file,"%d %d", &nbBriquesXFile, &nbBriquesYFile);
+
 	*nbBriques = nbBriquesXFile*nbBriquesYFile;
 
 	float 	ySize = 10, 
@@ -134,7 +102,6 @@ void loadLevelBriques(char * nomlevel, Brique *** arrayBrique, Balle ** balles, 
 			yPos=ySize*nbBriquesYFile/2;
 
 	printf("ysize %f, xSize : %f, xPos: %f, yPos, %f\n",ySize,xSize,xPos,yPos );
-
 
 	Brique ** grille_brique = (Brique **)malloc(sizeof(Brique*)*nbBriquesYFile*nbBriquesXFile);
 	
@@ -147,7 +114,7 @@ void loadLevelBriques(char * nomlevel, Brique *** arrayBrique, Balle ** balles, 
 			fscanf(file,"%d",&type_brique);
 			Brique * brique = initBrique(xPos,yPos,xSize,ySize,balles);
 			
-			configureBrique(&brique,type_brique);
+			configureBrique(&brique,type_brique,*textures_briques);
 			/*printf("Brique :\n");
 			printf("xPos : %f\n",brique->xPos);
 			printf("yPos : %f\n",brique->yPos);
@@ -163,6 +130,7 @@ void loadLevelBriques(char * nomlevel, Brique *** arrayBrique, Balle ** balles, 
 
 	*arrayBrique = grille_brique;
 	fclose(file);
+	glDeleteTextures(1,&texture_load);
 }
 
 void dessinBriques(Brique ** briques_array, int nbBriques){
@@ -173,10 +141,10 @@ void dessinBriques(Brique ** briques_array, int nbBriques){
 }
 
 
-void handleGrilleBrique(Brique ** briques_array, int nbBriques, int nbBalles){
+void handleGrilleBrique(Brique ** briques_array, int nbBriques, int nbBalles, Textures textures_briques){
 	int i;
 	for(i=0;i<nbBriques;i++){
-		handleBriqueBalles(&(briques_array[i]), nbBalles);
+		handleBriqueBalles(&(briques_array[i]), nbBalles,textures_briques);
 	}
 	
 }		
