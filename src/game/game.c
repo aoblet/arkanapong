@@ -23,8 +23,8 @@ void stopGame(Barre * barrej1, Barre * barrej2, Balle * ballej1, Balle * ballej2
 }
 
 void initVitesseBalles(Balle * ballej1, Balle * ballej2){
-	setVecteurVitesse(ballej1,5,5);
-	setVecteurVitesse(ballej2,-5,-5);
+	setVecteurVitesse(ballej1,2,2);
+	setVecteurVitesse(ballej2,-2,-2);
 }
 
 void initVitesseBarres(Barre * barrej1, Barre * barrej2){
@@ -99,7 +99,13 @@ void dessinWallpaper(GLuint textureWallpaper, float abcisseRepereMax, float ordo
 }
 
 
-void loadLevelBriques(char * nomlevel, Brique **** arrayBrique, Balle * balles, int * nbBriquesX, int *nbBriquesY, float abcisseRepereMax, float ordonneRepereMax){
+void loadLevelBriques(char * nomlevel, Brique *** arrayBrique, Balle ** balles, int * nbBriques, float abcisseRepereMax, float ordonneRepereMax){
+	
+	GLuint texture_load;
+	genereWallpaper(&texture_load,"../img/screen/loading.jpg");
+	dessinWallpaper(texture_load,abcisseRepereMax,ordonneRepereMax);
+	SDL_GL_SwapBuffers(); 
+
 	FILE * file = NULL;
 
 	if(!strcmp(nomlevel,"classique")){
@@ -120,8 +126,7 @@ void loadLevelBriques(char * nomlevel, Brique **** arrayBrique, Balle * balles, 
 
 
 	fscanf(file,"%d %d", &nbBriquesXFile, &nbBriquesYFile);
-	*nbBriquesX = nbBriquesXFile;
-	*nbBriquesY = nbBriquesYFile;
+	*nbBriques = nbBriquesXFile*nbBriquesYFile;
 
 	float 	ySize = 10, 
 			xSize = abcisseRepereMax*2/(float)nbBriquesXFile, 
@@ -131,11 +136,11 @@ void loadLevelBriques(char * nomlevel, Brique **** arrayBrique, Balle * balles, 
 	printf("ysize %f, xSize : %f, xPos: %f, yPos, %f\n",ySize,xSize,xPos,yPos );
 
 
-	Brique *** grille_brique = (Brique ***)malloc(sizeof(Brique**)*nbBriquesYFile);
+	Brique ** grille_brique = (Brique **)malloc(sizeof(Brique*)*nbBriquesYFile*nbBriquesXFile);
 	
-	int i,j;
+	int i,j,cpt=0;
 	for(j=0; j<nbBriquesYFile; j++){
-		Brique ** arrayTmp = (Brique**)malloc(sizeof(Brique*)*nbBriquesXFile);
+
 		xPos=-abcisseRepereMax+(xSize/2);
 
 		for(i=0;i<nbBriquesXFile;i++){
@@ -145,38 +150,33 @@ void loadLevelBriques(char * nomlevel, Brique **** arrayBrique, Balle * balles, 
 			configureBrique(&brique,type_brique);
 			/*printf("Brique :\n");
 			printf("xPos : %f\n",brique->xPos);
-			printf("yPos : %f\n",brique->xPos);
-			printf("xSize : %f\n",brique->xPos);
-			printf("ySize : %f\n",brique->xPos);
+			printf("yPos : %f\n",brique->yPos);
+			printf("xSize : %f\n",brique->xSize);
+			printf("ySize : %f\n",brique->ySize);
 			printf("texture : %d\n\n\n",brique->texture);*/
-			arrayTmp[i] = brique;
+			grille_brique[cpt] = brique;
 			xPos += xSize;
+			cpt++;
 		}
 		yPos -= ySize;
-		grille_brique[j] = arrayTmp;
 	}
 
 	*arrayBrique = grille_brique;
 	fclose(file);
 }
 
-void dessinBriques(Brique *** briques_array, int x, int y){
-	int i,j;
-	for(j=0;j<y;j++){
-		Brique ** arrayTmp = briques_array[j];
-		for(i=0;i<x;i++){
-			dessinBrique(arrayTmp[i]);
-		}
+void dessinBriques(Brique ** briques_array, int nbBriques){
+	int i;
+	for(i=0;i<nbBriques;i++){
+		dessinBrique(briques_array[i]);
 	}
 }
 
 
-void handleGrilleBrique(Brique *** briques_array, Balle ** balles, int nbBriquesX, int nbBriquesY, int nbBalles){
-	int i,j;
-	for(j=0; j<nbBriquesY; j++){
-		Brique ** arrayTmp = briques_array[j];
-		for(i=0;i<nbBriquesX;i++){
-			handleBriqueBalles(&(arrayTmp[i]),balles, nbBalles);
-		}
+void handleGrilleBrique(Brique ** briques_array, int nbBriques, int nbBalles){
+	int i;
+	for(i=0;i<nbBriques;i++){
+		handleBriqueBalles(&(briques_array[i]), nbBalles);
 	}
+	
 }		

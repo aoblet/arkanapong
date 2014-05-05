@@ -71,11 +71,12 @@ int main(int argc, char * argv []){
 
 
 	/********* INIT BRIQUES *************/
-	Brique *** arrayBrique = NULL;
-	printf("Briques adr avant %p\n",arrayBrique );
-	int nbBriquesX, nbBriquesY;
+	Brique ** arrayBrique = NULL;
+
+	int nbBriques,nbBalles = 2;
 	Balle * balles[2]={&balle_joueur1,&balle_joueur2};
-	loadLevelBriques("classique",&arrayBrique,*balles,&nbBriquesX,&nbBriquesY,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
+
+	loadLevelBriques("classique",&arrayBrique,balles,&nbBriques,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
 	printf("Briques adr apres %p\n",arrayBrique );
 
 
@@ -97,7 +98,7 @@ int main(int argc, char * argv []){
 	   	dessinBarre(&barre_joueur1);
 	    dessinBarre(&barre_joueur2);
 
-	    dessinBriques(arrayBrique,nbBriquesX,nbBriquesY);
+	    dessinBriques(arrayBrique,nbBriques);
 
 	    SDL_GL_SwapBuffers(); 
 	    /* fin dessin */
@@ -120,7 +121,7 @@ int main(int argc, char * argv []){
 		    
 
 		    /*************BRIQUES ***************/
-			handleGrilleBrique(arrayBrique, balles,nbBriquesX, nbBriquesY, 2);
+			handleGrilleBrique(arrayBrique, nbBriques, nbBalles);
 
 
 
