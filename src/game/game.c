@@ -67,8 +67,8 @@ void loadGame(	char * theme, GLuint * texture_wallpaper, char * nomlevel, Brique
 	
 	GLuint texture_load;
 	loadTexture(&texture_load,"../img/utils/loading.jpg");
-	//dessinWallpaper(texture_load,abcisseRepereMax,ordonneRepereMax);
-	//SDL_GL_SwapBuffers(); 
+	dessinWallpaper(texture_load,abcisseRepereMax,ordonneRepereMax);
+	SDL_GL_SwapBuffers(); 
 
 	/***** CHARGEMENT LEVEL *******/
 	FILE * file = NULL;
@@ -76,9 +76,14 @@ void loadGame(	char * theme, GLuint * texture_wallpaper, char * nomlevel, Brique
 
 	if(!strcmp(nomlevel,"classique")){
 		strcpy(chemin_level,"../level/classique.txt");
-
 	}
-	else if(!strcmp(nomlevel,"a")){
+	else if(!strcmp(nomlevel,"arkana")){
+		strcpy(chemin_level,"../level/a.txt");
+	}
+	else if(!strcmp(nomlevel,"full_bonus")){
+		strcpy(chemin_level,"../level/a.txt");
+	}
+	else if(!strcmp(nomlevel,"no_bonus")){
 		strcpy(chemin_level,"../level/a.txt");
 	}
 	else{

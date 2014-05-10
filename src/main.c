@@ -11,7 +11,7 @@
 #include "textures/textures.h"
 #include "game/masterLauncher.h"
 
-static unsigned int WINDOW_WIDTH = 1000;
+static unsigned int WINDOW_WIDTH = 800;
 static unsigned int WINDOW_HEIGHT = 800;
 
 static float ABCISSE_REPERE_MAX = 200;
@@ -53,36 +53,12 @@ int main(int argc, char * argv []){
  	setVideoMode();
   	SDL_WM_SetCaption("Arkana", NULL);
 	
-
-  	/******** INIT SCREEN & JOUEUR *******/
-  	float default_taille_barre_x = 60, default_taille_barre_y = 5, x_vitesse_barre_default = 5, norme_vitesse_balle_default = 3;
-
-  	Barre barre_joueur1 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,100,187,205);
-  	Joueur j1 = initJoueur("Alexis","Oblet",10,&barre_joueur1);
-  	Balle balle_joueur1 = initBalle(0,-ORDONNE_REPERE_MAX+30,0,0,5,151,187,205,&j1);
-
-  	Barre barre_joueur2 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,255,204,0);
-  	Joueur j2 = initJoueur("Machine","Invincible",10,&barre_joueur2);
-  	Balle balle_joueur2 = initBalle(0,ORDONNE_REPERE_MAX-30,0,0,5,255,204,0,&j2);
-
-
-	/**********INIT GAME**************/
-	Brique ** arrayBrique = NULL;
-  	GLuint texture_wallpaper;
-  	Textures textures_briques;
-	int nbBriques,nbBalles = 2;
-	Balle * balles[2]={&balle_joueur1,&balle_joueur2};
-
-	char theme[50],level[50],mode_jeu[50];
+  	char theme[50],level[50],mode_jeu[50];
 	Item_menu menu[6];
 	genereMenu(menu,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
 
-	loadGame("mario", &texture_wallpaper, "classique", &arrayBrique,balles, &nbBriques, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX,&textures_briques);
-	initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
-
-
 	/********* MENU ********/
-  	int loop=1,indice_fleches_verticales=0,indice_fleches_horizontales=0;
+  	int loop=1,indice_fleches_verticales=0,indice_fleches_horizontales=0,exit_arkana=0;
   	while(loop){
 		glClear(GL_COLOR_BUFFER_BIT);
 		drawItem(&(menu[WALLPAPER]),ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
@@ -117,7 +93,7 @@ int main(int argc, char * argv []){
 
 	            		case SDLK_UP:
 	            			indice_fleches_verticales--;
-	            			handleMenu(&indice_fleches_verticales,&indice_fleches_horizontales,menu,5); // on ne compte pas le dernier(wallpaper)
+	            			handleMenu(&indice_fleches_verticales,&indice_fleches_horizontales,	menu,5); // on ne compte pas le dernier(wallpaper)
 
 	            		break;
 
@@ -144,6 +120,10 @@ int main(int argc, char * argv []){
 	      	    				strcpy(mode_jeu,menu[MODE_JEU].values[menu[MODE_JEU].indice_courant]);
 	      	    				loop=0;
 	      	    			}
+	      	    			else if(indice_fleches_verticales == QUIT){
+	      	    				loop=0;
+	      	    				exit_arkana=1;
+	      	    			}
 	      	    		break;
 	      	    		default : break;
 	      	  	}
@@ -167,13 +147,36 @@ int main(int argc, char * argv []){
     	}
 	}
 
-	printf("theme %s\n",theme );
-	printf("level %s\n",level );
-	printf("mode_jeu %s\n",mode_jeu );
 
 	/********* JEU ********/
-	loop=1;
-	int partie_stopped=1;
+	/**********************/
+
+  	/******** INIT SCREEN & JOUEUR *******/
+  	float default_taille_barre_x = 60, default_taille_barre_y = 5, x_vitesse_barre_default = 5, norme_vitesse_balle_default = 3;
+
+  	Barre barre_joueur1 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,100,187,205);
+  	Joueur j1 = initJoueur("Alexis","Oblet",10,&barre_joueur1);
+  	Balle balle_joueur1 = initBalle(0,-ORDONNE_REPERE_MAX+30,0,0,5,151,187,205,&j1);
+
+  	Barre barre_joueur2 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,255,204,0);
+  	Joueur j2 = initJoueur("Machine","Invincible",10,&barre_joueur2);
+  	Balle balle_joueur2 = initBalle(0,ORDONNE_REPERE_MAX-30,0,0,5,255,204,0,&j2);
+
+
+	/**********INIT GAME**************/
+	Brique ** arrayBrique = NULL;
+  	GLuint texture_wallpaper;
+  	Textures textures_briques;
+	int nbBriques,nbBalles = 2;
+	Balle * balles[2]={&balle_joueur1,&balle_joueur2};
+
+
+	loadGame(theme, &texture_wallpaper, level, &arrayBrique,balles, &nbBriques, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX,&textures_briques);
+	initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
+
+
+	loop = exit_arkana == 1 ? 0:1; 
+	int partie_stopped=1, IA = !strcmp(mode_jeu,"solo")?1:0;
   	while(loop) {
     	Uint32 startTime = SDL_GetTicks();
 
@@ -226,9 +229,9 @@ int main(int argc, char * argv []){
 
 
 		    /*****  IA  ******/
-		   	//handleBarreIAJ2( &balle_joueur1, &balle_joueur2, &j1, &j2, ORDONNE_REPERE_MAX);
+		    if(IA)
+		   		handleBarreIAJ2( &balle_joueur1, &balle_joueur2, &j1, &j2, ORDONNE_REPERE_MAX);
 		   
-
 		    /****** GESTION PERTE ******/
 			int perte_potentiel_balle1 = handleBalleBorder(&balle_joueur1, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
 			if(perte_potentiel_balle1 == -1){

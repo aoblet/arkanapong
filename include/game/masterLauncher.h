@@ -10,7 +10,7 @@
 
 void genereMenu(Item_menu * menu, float abcisse_repere_max, float ordonne_repere_max); // abcisse et ordonnées pour orga des positions
 void handleItem(int * indice_item_inside, int indice_menu, Item_menu * item,Item_menu * menu);
-void handleMenu(int * indice_menu, int * indice_item, Item_menu, Item_menu * menu, int nb_items_menu);
+void handleMenu(int * indice_menu, int * indice_item,  Item_menu * menu, int nb_items_menu);
 void drawItem(Item_menu * item, float abcisse_repere_max, float ordonne_repere_max );
 
 #endif
