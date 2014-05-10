@@ -1,4 +1,5 @@
 #include <SDL/SDL.h>
+#include <SDL/SDL_mixer.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <stdlib.h>
@@ -10,6 +11,7 @@
 #include "game/game.h"
 #include "textures/textures.h"
 #include "game/masterLauncher.h"
+
 
 static unsigned int WINDOW_WIDTH = 800;
 static unsigned int WINDOW_HEIGHT = 800;
@@ -56,6 +58,14 @@ int main(int argc, char * argv []){
   	char theme[50],level[50],mode_jeu[50];
 	Item_menu menu[6];
 	genereMenu(menu,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
+
+	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){
+  	 	printf("%s", Mix_GetError());
+  	}
+
+	Mix_VolumeMusic(40);
+  	Mix_Music *musique_menu = Mix_LoadMUS("../son/Gramatik_No_Way_Out.mp3");
+	Mix_FadeInMusic(musique_menu,-1,2000);
 
 	/********* MENU ********/
   	int loop=1,indice_fleches_verticales=0,indice_fleches_horizontales=0,exit_arkana=0;
@@ -146,7 +156,12 @@ int main(int argc, char * argv []){
 	      	}
     	}
 	}
+	Mix_FadeOutMusic(1000);
+	Mix_FreeMusic(musique_menu);
 
+	Mix_Music *musique_game = Mix_LoadMUS("../son/Gramatik_Break_loose.mp3");
+  	Mix_VolumeMusic(50);
+  	Mix_FadeInMusic(musique_game,-1,4000);
 
 	/********* JEU ********/
 	/**********************/
@@ -174,6 +189,8 @@ int main(int argc, char * argv []){
 	loadGame(theme, &texture_wallpaper, level, &arrayBrique,balles, &nbBriques, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX,&textures_briques);
 	initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
 
+
+  	
 
 	loop = exit_arkana == 1 ? 0:1; 
 	int partie_stopped=1, IA = !strcmp(mode_jeu,"solo")?1:0;
@@ -342,6 +359,9 @@ int main(int argc, char * argv []){
 	detruireBriques(arrayBrique,nbBriques);
  	glBindTexture(GL_TEXTURE_2D,0);
     glDeleteTextures(1,&texture_wallpaper);
+    Mix_FreeMusic(musique_game);
+    Mix_CloseAudio();
+    Mix_Quit();
   	SDL_Quit(); 
 	return EXIT_SUCCESS;
 
