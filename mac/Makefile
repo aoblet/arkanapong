@@ -3,7 +3,7 @@
 
 CC=gcc
 CFLAGS=-Wall -g
-LDFLAGS= -L/usr/X11R6/lib -lSDLmain -lSDL -lSDL_image  -lm -framework Cocoa -framework OpenGL
+LDFLAGS= -L/usr/X11R6/lib -lSDLmain -lSDL -lSDL_image -lsdl_mixer -lm -framework Cocoa -framework OpenGL
 
 SRC_PATH=../src
 OBJ_PATH=../obj
