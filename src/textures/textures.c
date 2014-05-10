@@ -114,12 +114,12 @@ void loadTexturesMenu(Textures * textures){
 	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_PONG_ON]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/pong/on/1.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_PONG_OFF]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/pong/off/1.png"));
 	
-	loadTexture( &(textures->identifiants[TEXTURE_QUIT_ON]) , 					strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level//on/1.png"));
-	loadTexture( &(textures->identifiants[TEXTURE_QUIT_OFF]) , 					strcat(strcpy(chemin_menu_copy,chemin_menu),"item/vitesse_barre/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_QUIT_ON]) , 					strcat(strcpy(chemin_menu_copy,chemin_menu),"item/quit/on/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_QUIT_OFF]) , 					strcat(strcpy(chemin_menu_copy,chemin_menu),"item/quit/off/1.png"));
 	
-	loadTexture( &(textures->identifiants[TEXTURE_WALLPAPER_MARIO]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"wallpaper/vitesse_barre/1.png"));
-	loadTexture( &(textures->identifiants[TEXTURE_WALLPAPER_ESPACE]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"wallpaper/vitesse_barre/1.png"));
-	loadTexture( &(textures->identifiants[TEXTURE_WALLPAPER_FLAT]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"wallpaper/vitesse_barre/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_WALLPAPER_MARIO]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"wallpaper/mario.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_WALLPAPER_ESPACE]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"wallpaper/espace.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_WALLPAPER_FLAT]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"wallpaper/flat.png"));
 }
 
 void detruireTextures(Textures * textures){
