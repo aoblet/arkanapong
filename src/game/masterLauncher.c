@@ -70,7 +70,7 @@ void drawItem(Item_menu * item, float abcisse_repere_max, float ordonne_repere_m
 void genereMenu(Item_menu * menu, float abcisse_repere_max, float ordonne_repere_max){
 	float center_x = abcisse_repere_max /2; //3/4 de la fenetre en x
 
-	float x_size = 150, y_size = 33, yEspace = 2, yPos =(y_size+yEspace)*5/2 + y_size;
+	float x_size = 150, y_size = 33, yEspace = 2, yPos =(y_size+yEspace)*5/2 ;
 	Textures textures_menu;
 	loadTexturesMenu(&textures_menu);
 
