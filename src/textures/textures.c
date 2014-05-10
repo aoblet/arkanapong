@@ -55,7 +55,7 @@ void loadTexture(GLuint * id, char * chemin_texture){
 
 
 void loadTexturesBriques(Textures * textures, char * theme){
-	textures->nb_textures = NB_TEXTURES;
+	textures->nb_textures = NB_TEXTURES_BRIQUES;
 	char theme_string_safe[50];
 	strcpy(theme_string_safe,theme);
 
@@ -73,15 +73,53 @@ void loadTexturesBriques(Textures * textures, char * theme){
 	loadTexture( &(textures->identifiants[TEXTURE_AGRANDISSEMENT_BARRE_3]) , 	strcat(strcpy(chemin_theme_copy,chemin_theme),"agrandissement_barre/3.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_AGRANDISSEMENT_BARRE_2]) ,	strcat(strcpy(chemin_theme_copy,chemin_theme),"agrandissement_barre/2.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_AGRANDISSEMENT_BARRE_1]) , 	strcat(strcpy(chemin_theme_copy,chemin_theme),"agrandissement_barre/1.png"));
-	//loadTexture( textures->identifiants[TEXTURE_REDUCTION_BARRE_1] , 			strcat(strcpy(chemin_theme_copy,chemin_theme),"reduction_barre/1.png"));
+	//loadTexture( &(textures->identifiants[TEXTURE_REDUCTION_BARRE_1]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"reduction_barre/1.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_VITESSE_PLUS_BALLE_2]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_plus_balle/2.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_VITESSE_PLUS_BALLE_1]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_plus_balle/1.png"));
-	//loadTexture( textures->identifiants[TEXTURE_VITESSE_MOINS_BALLE_2] , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_moins_balle/2.png"));
-	//loadTexture( textures->identifiants[TEXTURE_VITESSE_MOINS_BALLE_1] , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_moins_balle/1.png"));
-	//loadTexture( textures->identifiants[TEXTURE_INVERSION_VITESSE_BARRE_1] , 	strcat(strcpy(chemin_theme_copy,chemin_theme),"inversion_vitesse_barre/1.png"));
-	//loadTexture( textures->identifiants[TEXTURE_VITESSE_BARRE_3] , 			strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_barre/3.png"));
-	//loadTexture( textures->identifiants[TEXTURE_VITESSE_BARRE_2] , 			strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_barre/2.png"));
-	//loadTexture( textures->identifiants[TEXTURE_VITESSE_BARRE_1] , 			strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_barre/1.png"));
+	//loadTexture( &(textures->identifiants[TEXTURE_VITESSE_MOINS_BALLE_2]) , 	strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_moins_balle/2.png"));
+	//loadTexture( &(textures->identifiants[TEXTURE_VITESSE_MOINS_BALLE_1]) , 	strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_moins_balle/1.png"));
+	//loadTexture( &(textures->identifiants[TEXTURE_INVERSION_VITESSE_BARRE_1]) , strcat(strcpy(chemin_theme_copy,chemin_theme),"inversion_vitesse_barre/1.png"));
+	//loadTexture( &(textures->identifiants[TEXTURE_VITESSE_BARRE_3]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_barre/3.png"));
+	//loadTexture( &(textures->identifiants[TEXTURE_VITESSE_BARRE_2]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_barre/2.png"));
+	//loadTexture( &(textures->identifiants[TEXTURE_VITESSE_BARRE_1]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_barre/1.png"));
+}
+
+void loadTexturesMenu(Textures * textures){
+	char * chemin_menu = "../img/menu/";
+	char chemin_menu_copy[1000];
+
+	loadTexture( &(textures->identifiants[TEXTURE_START_GAME_ON]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/start/on/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_START_GAME_OFF]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/start/off/1.png"));
+	
+	loadTexture( &(textures->identifiants[TEXTURE_MODE_JEU_SOLO_ON]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/mode/solo/on/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_MODE_JEU_SOLO_OFF]) ,			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/mode/solo/off/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_MODE_JEU_MULTI_ON]) , 		strcat(strcpy(chemin_menu_copy,chemin_menu),"item/mode/multi/on/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_MODE_JEU_MULTI_OFF]) , 		strcat(strcpy(chemin_menu_copy,chemin_menu),"item/mode/multi/off/1.png"));
+	
+	loadTexture( &(textures->identifiants[TEXTURE_THEME_MARIO_ON]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/theme/mario/on/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_THEME_MARIO_OFF]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/theme/mario/off/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_THEME_ESPACE_ON]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/theme/espace/on/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_THEME_ESPACE_OFF]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/theme/espace/off/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_THEME_FLAT_ON]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/theme/flat/on/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_THEME_FLAT_OFF]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/theme/flat/off/1.png"));
+	
+	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_CLASSIQUE_ON]) , 		strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/classique/on/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_CLASSIQUE_OFF]) , 		strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/classique/off/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_FULL_BONUS_ON]) , 		strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/full_bonus/on/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_FULL_BONUS_OFF]) , 		strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/full_bonus/off/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_ARKANA_ON]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/arkana/on/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_ARKANA_OFF]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/arkana/off/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_NO_BONUS_ON]) , 		strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/no_bonus/on/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_NO_BONUS_OFF]) , 		strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/no_bonus/off/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_PONG_ON]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/pong/on/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_PONG_OFF]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/pong/off/1.png"));
+	
+	loadTexture( &(textures->identifiants[TEXTURE_QUIT_ON]) , 					strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level//on/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_QUIT_OFF]) , 					strcat(strcpy(chemin_menu_copy,chemin_menu),"item/vitesse_barre/1.png"));
+	
+	loadTexture( &(textures->identifiants[TEXTURE_WALLPAPER_MARIO]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"wallpaper/vitesse_barre/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_WALLPAPER_ESPACE]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"wallpaper/vitesse_barre/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_WALLPAPER_FLAT]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"wallpaper/vitesse_barre/1.png"));
 }
 
 void detruireTextures(Textures * textures){

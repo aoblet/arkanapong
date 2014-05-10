@@ -73,9 +73,8 @@ int main(int argc, char * argv []){
 
 	int nbBriques,nbBalles = 2;
 	Balle * balles[2]={&balle_joueur1,&balle_joueur2};
-	loadGame("default", &texture_wallpaper, "classique", &arrayBrique,balles, &nbBriques, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX,&textures_briques);
+	loadGame("default", &texture_wallpaper, "a", &arrayBrique,balles, &nbBriques, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX,&textures_briques);
 	initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
-
 
   	int loop=1;
   	int partie_stopped=1;
