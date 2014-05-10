@@ -101,7 +101,7 @@ int handleBalleBarres(Balle * b, struct Joueur * joueur1, struct Joueur * joueur
 
 				setPositionBalle(b,b->xPos,extremiteBarreHaut_j1+b->rayon);
 				setAngleVitesseBalle(b,angle_after_rebond);
-				joueur1->nb_coups ++;
+				joueur1->nb_coups_barre ++;
 				return 1;
 			}
 		}
@@ -124,7 +124,7 @@ int handleBalleBarres(Balle * b, struct Joueur * joueur1, struct Joueur * joueur
 
 				setPositionBalle(b,b->xPos,extremiteBarreBas_j2-b->rayon);
 				setAngleVitesseBalle(b,angle_after_rebond);
-				joueur2->nb_coups ++;
+				joueur2->nb_coups_barre ++;
 				return 1;
 			}
 		}

@@ -53,11 +53,12 @@ int main(int argc, char * argv []){
 	}
 
  	setVideoMode();
-  	SDL_WM_SetCaption("Arkana", NULL);
+  	SDL_WM_SetCaption("Arkana-Pong", NULL);
 	
   	char theme[50],level[50],mode_jeu[50];
 	Item_menu menu[6];
-	genereMenu(menu,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
+	Textures textures_menu;
+	genereMenu(menu,&textures_menu,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
 
 	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){
   	 	printf("%s", Mix_GetError());
@@ -84,6 +85,7 @@ int main(int argc, char * argv []){
 	    while(SDL_PollEvent(&e)) {
 	    	if(e.type == SDL_QUIT) {
 	    		loop = 0;
+	    		exit_arkana=1;
 	        	break;
 	      	}
 	      
@@ -156,210 +158,220 @@ int main(int argc, char * argv []){
 	      	}
     	}
 	}
+
+	detruireTextures(&textures_menu);
+
 	Mix_FadeOutMusic(1000);
 	Mix_FreeMusic(musique_menu);
 
-	Mix_Music *musique_game = Mix_LoadMUS("../son/Gramatik_Break_loose.mp3");
-  	Mix_VolumeMusic(50);
-  	Mix_FadeInMusic(musique_game,-1,4000);
+	if(!exit_arkana){
+		Mix_Music *musique_game = Mix_LoadMUS("../son/Gramatik_Break_loose.mp3");
+	  	Mix_VolumeMusic(50);
+	  	Mix_FadeInMusic(musique_game,-1,4000);
 
-	/********* JEU ********/
-	/**********************/
+		/********* JEU ********/
+		/**********************/
 
-  	/******** INIT SCREEN & JOUEUR *******/
-  	float default_taille_barre_x = 60, default_taille_barre_y = 5, x_vitesse_barre_default = 5, norme_vitesse_balle_default = 3;
+	  	/******** INIT SCREEN & JOUEUR *******/
+	  	Textures textures_barres;
+	  	loadTexturesBarres(&textures_barres,theme);
 
-  	Barre barre_joueur1 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,100,187,205);
-  	Joueur j1 = initJoueur("Alexis","Oblet",10,&barre_joueur1);
-  	Balle balle_joueur1 = initBalle(0,-ORDONNE_REPERE_MAX+30,0,0,5,151,187,205,&j1);
+	  	float default_taille_barre_x = 80, default_taille_barre_y = 10, x_vitesse_barre_default = 5, norme_vitesse_balle_default = 3;
 
-  	Barre barre_joueur2 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,255,204,0);
-  	Joueur j2 = initJoueur("Machine","Invincible",10,&barre_joueur2);
-  	Balle balle_joueur2 = initBalle(0,ORDONNE_REPERE_MAX-30,0,0,5,255,204,0,&j2);
+	  	Barre barre_joueur1 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,100,187,205);
+	  	barre_joueur1.texture = textures_barres.identifiants[TEXTURE_BARRE_BAS];
+	  	Joueur j1 = initJoueur("Alexis","Oblet",10,&barre_joueur1);
+	  	Balle balle_joueur1 = initBalle(0,-ORDONNE_REPERE_MAX+30,0,0,5,151,187,205,&j1);
 
-
-	/**********INIT GAME**************/
-	Brique ** arrayBrique = NULL;
-  	GLuint texture_wallpaper;
-  	Textures textures_briques;
-	int nbBriques,nbBalles = 2;
-	Balle * balles[2]={&balle_joueur1,&balle_joueur2};
+	  	Barre barre_joueur2 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,255,204,0);
+	  	barre_joueur2.texture = textures_barres.identifiants[TEXTURE_BARRE_HAUT];
+	  	Joueur j2 = initJoueur("Machine","Invincible",10,&barre_joueur2);
+	  	Balle balle_joueur2 = initBalle(0,ORDONNE_REPERE_MAX-30,0,0,5,255,204,0,&j2);
 
 
-	loadGame(theme, &texture_wallpaper, level, &arrayBrique,balles, &nbBriques, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX,&textures_briques);
-	initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
+		/**********INIT GAME**************/
+		Brique ** arrayBrique = NULL;
+	  	GLuint texture_wallpaper;
+	  	Textures textures_briques;
+		int nbBriques,nbBalles = 2;
+		Balle * balles[2]={&balle_joueur1,&balle_joueur2};
 
 
+		loadGame(theme, &texture_wallpaper, level, &arrayBrique,balles, &nbBriques, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX,&textures_briques);
+		initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
   	
 
-	loop = exit_arkana == 1 ? 0:1; 
-	int partie_stopped=1, IA = !strcmp(mode_jeu,"solo")?1:0;
-  	while(loop) {
-    	Uint32 startTime = SDL_GetTicks();
+		loop = 1; 
+		int partie_stopped=1, IA = !strcmp(mode_jeu,"solo")?1:0;
+	  	while(loop) {
+	    	Uint32 startTime = SDL_GetTicks();
 
-	    /* dessin */
-	    glClear(GL_COLOR_BUFFER_BIT);
-	    glMatrixMode(GL_MODELVIEW);
-	    glLoadIdentity();
+		    /* dessin */
+		    glClear(GL_COLOR_BUFFER_BIT);
+		    glMatrixMode(GL_MODELVIEW);
+		    glLoadIdentity();
 
-	    glColor3ub(255,255,255); // init
-	    dessinWallpaper(texture_wallpaper,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
+		    glColor3ub(255,255,255); // init
+		    dessinWallpaper(texture_wallpaper,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
 
-	    dessinBalle(&balle_joueur1,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
-	   	dessinBalle(&balle_joueur2,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
-	   	dessinBarre(&barre_joueur1);
-	    dessinBarre(&barre_joueur2);
-	    dessinBriques(arrayBrique,nbBriques);
+		    dessinBalle(&balle_joueur1,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
+		   	dessinBalle(&balle_joueur2,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
+		   	dessinBarre(&barre_joueur1);
+		    dessinBarre(&barre_joueur2);
+		    dessinBriques(arrayBrique,nbBriques);
 
-	    SDL_GL_SwapBuffers(); 
-	    /* fin dessin */
+		    SDL_GL_SwapBuffers(); 
+		    /* fin dessin */
 
-	    if(!partie_stopped){
+		    if(!partie_stopped){
 
-		    //gestion touche enfoncée
-		    Uint8 *keystates = SDL_GetKeyState(NULL);
-		    //joueur 1
-		    if(keystates[ SDLK_RIGHT])
-		    	deplacerBarreX(&barre_joueur1,1,ABCISSE_REPERE_MAX);
-		    else if(keystates[ SDLK_LEFT])
-		    	deplacerBarreX(&barre_joueur1,-1,ABCISSE_REPERE_MAX);
+			    //gestion touche enfoncée
+			    Uint8 *keystates = SDL_GetKeyState(NULL);
+			    //joueur 1
+			    if(keystates[ SDLK_RIGHT])
+			    	deplacerBarreX(&barre_joueur1,1,ABCISSE_REPERE_MAX);
+			    else if(keystates[ SDLK_LEFT])
+			    	deplacerBarreX(&barre_joueur1,-1,ABCISSE_REPERE_MAX);
 
-		    //joueur 2
-		    if(keystates[ SDLK_r])
-		    	deplacerBarreX(&barre_joueur2,1,ABCISSE_REPERE_MAX);
-		    else if(keystates[ SDLK_e])
-		    	deplacerBarreX(&barre_joueur2,-1,ABCISSE_REPERE_MAX);
+			    //joueur 2
+			    if(keystates[ SDLK_r])
+			    	deplacerBarreX(&barre_joueur2,1,ABCISSE_REPERE_MAX);
+			    else if(keystates[ SDLK_e])
+			    	deplacerBarreX(&barre_joueur2,-1,ABCISSE_REPERE_MAX);
 
-		    /************BARRES****************/
-			handleBalleBarres(&balle_joueur1,&j1,&j2);
-			handleBalleBarres(&balle_joueur2,&j1,&j2);
+			    /************BARRES****************/
+				handleBalleBarres(&balle_joueur1,&j1,&j2);
+				handleBalleBarres(&balle_joueur2,&j1,&j2);
 
-		    /***********BONUS******************/
-		    updateBonusJoueur(&j1,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default);
-		    updateBonusJoueur(&j2,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default);
-		    updateBonusBalle(&balle_joueur1,norme_vitesse_balle_default);
-		    updateBonusBalle(&balle_joueur2,norme_vitesse_balle_default);
+			    /***********BONUS******************/
+			    updateBonusJoueur(&j1,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default);
+			    updateBonusJoueur(&j2,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default);
+			    updateBonusBalle(&balle_joueur1,norme_vitesse_balle_default);
+			    updateBonusBalle(&balle_joueur2,norme_vitesse_balle_default);
 
-		    /*************BRIQUES ***************/
-			handleGrilleBrique(arrayBrique, nbBriques, nbBalles,textures_briques);
+			    /*************BRIQUES ***************/
+				handleGrilleBrique(arrayBrique, nbBriques, nbBalles,textures_briques);
 
 
 
-		    /*****  IA  ******/
-		    if(IA)
-		   		handleBarreIAJ2( &balle_joueur1, &balle_joueur2, &j1, &j2, ORDONNE_REPERE_MAX);
-		   
-		    /****** GESTION PERTE ******/
-			int perte_potentiel_balle1 = handleBalleBorder(&balle_joueur1, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
-			if(perte_potentiel_balle1 == -1){
-				j1.vie -=1;
-				partie_stopped = 1;
+			    /*****  IA  ******/
+			    if(IA)
+			   		handleBarreIAJ2( &balle_joueur1, &balle_joueur2, &j1, &j2, ORDONNE_REPERE_MAX);
+			   
+			    /****** GESTION PERTE ******/
+				int perte_potentiel_balle1 = handleBalleBorder(&balle_joueur1, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
+				if(perte_potentiel_balle1 == -1){
+					j1.vie -=1;
+					partie_stopped = 1;
+				}
+				else if(perte_potentiel_balle1 == -2){
+					j2.vie -=1;
+					partie_stopped = 1;
+				}
+				
+				int perte_potentiel_balle2 = handleBalleBorder(&balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
+				if(perte_potentiel_balle2 == -1){
+					j1.vie -=1;
+					partie_stopped = 1;
+				}
+				else if(perte_potentiel_balle2 == -2){
+					j2.vie -=1;
+					partie_stopped = 1;
+				}
+				
+				if(partie_stopped){
+					stopGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2);
+				}
 			}
-			else if(perte_potentiel_balle1 == -2){
-				j2.vie -=1;
-				partie_stopped = 1;
-			}
-			
-			int perte_potentiel_balle2 = handleBalleBorder(&balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
-			if(perte_potentiel_balle2 == -1){
-				j1.vie -=1;
-				partie_stopped = 1;
-			}
-			else if(perte_potentiel_balle2 == -2){
-				j2.vie -=1;
-				partie_stopped = 1;
-			}
-			
-			if(partie_stopped){
-				stopGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2);
-			}
+
+
+		    SDL_Event e;
+		    while(SDL_PollEvent(&e)) {
+		    	if(e.type == SDL_QUIT) {
+		    		loop = 0;
+		        	break;
+		      	}
+		      
+		      	switch(e.type) {
+		        	case SDL_MOUSEBUTTONUP:
+		          
+		        	break;
+		          
+			        case SDL_VIDEORESIZE:
+			          WINDOW_WIDTH = e.resize.w;
+			          WINDOW_HEIGHT = e.resize.h;
+			          setVideoMode();
+			        break;
+
+		        	case SDL_KEYDOWN:
+		      	  		switch(e.key.keysym.sym){
+		      	    		case 'q' : 
+		      	    		case SDLK_ESCAPE : 
+		        		  		loop = 0;
+		        			break;
+
+		            		case SDLK_UP:
+		            		break;
+
+		            		case SDLK_DOWN:
+		           			break;
+		      	    		
+		      	    		case SDLK_RETURN :
+		      	    				initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
+									//vitesse default balles
+									initVitesseBalles(&balle_joueur1,&balle_joueur2);
+									initVitesseBarres(&barre_joueur1,&barre_joueur2);
+			      	    		if(partie_stopped){
+									initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
+									//vitesse default balles
+									initVitesseBalles(&balle_joueur1,&balle_joueur2);
+									initVitesseBarres(&barre_joueur1,&barre_joueur2);
+									initBonusJoueurs(&j1,&j2);
+									partie_stopped = 0;
+									printf("Vie joueur 1: %d\n", j1.vie );
+									printf("Vie joueur 2: %d\n", j2.vie );
+									printf("\n" );
+			      	    		}
+		      	    		break;
+		      	    		default : break;
+		      	  	}
+
+		          	break;
+		          
+		         	case SDL_KEYUP:
+		          		switch(e.key.keysym.sym){
+		          			case SDLK_UP:
+		          				setAcceleration(&balle_joueur1,1.2);
+		          				setAcceleration(&balle_joueur2,1.2);
+		            		break;
+
+				            case SDLK_DOWN:
+		          				setAcceleration(&balle_joueur1,0.5);
+		          				setAcceleration(&balle_joueur2,0.5);
+
+				            break;
+
+		            		default:break;
+		         	} 
+		        	default:break;
+
+		      	}
+	    	}
+	    
+			Uint32 elapsedTime = SDL_GetTicks() - startTime;
+		    if(elapsedTime < FRAMERATE_MILLISECONDS) {
+		      	SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
+		    }
 		}
 
-
-	    SDL_Event e;
-	    while(SDL_PollEvent(&e)) {
-	    	if(e.type == SDL_QUIT) {
-	    		loop = 0;
-	        	break;
-	      	}
-	      
-	      	switch(e.type) {
-	        	case SDL_MOUSEBUTTONUP:
-	          
-	        	break;
-	          
-		        case SDL_VIDEORESIZE:
-		          WINDOW_WIDTH = e.resize.w;
-		          WINDOW_HEIGHT = e.resize.h;
-		          setVideoMode();
-		        break;
-
-	        	case SDL_KEYDOWN:
-	      	  		switch(e.key.keysym.sym){
-	      	    		case 'q' : 
-	      	    		case SDLK_ESCAPE : 
-	        		  		loop = 0;
-	        			break;
-
-	            		case SDLK_UP:
-	            		break;
-
-	            		case SDLK_DOWN:
-	           			break;
-	      	    		
-	      	    		case SDLK_RETURN :
-	      	    				initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
-								//vitesse default balles
-								initVitesseBalles(&balle_joueur1,&balle_joueur2);
-								initVitesseBarres(&barre_joueur1,&barre_joueur2);
-		      	    		if(partie_stopped){
-								initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
-								//vitesse default balles
-								initVitesseBalles(&balle_joueur1,&balle_joueur2);
-								initVitesseBarres(&barre_joueur1,&barre_joueur2);
-								initBonusJoueurs(&j1,&j2);
-								partie_stopped = 0;
-								printf("Vie joueur 1: %d\n", j1.vie );
-								printf("Vie joueur 2: %d\n", j2.vie );
-								printf("\n" );
-		      	    		}
-	      	    		break;
-	      	    		default : break;
-	      	  	}
-
-	          	break;
-	          
-	         	case SDL_KEYUP:
-	          		switch(e.key.keysym.sym){
-	          			case SDLK_UP:
-	          				setAcceleration(&balle_joueur1,1.2);
-	          				setAcceleration(&balle_joueur2,1.2);
-	            		break;
-
-			            case SDLK_DOWN:
-	          				setAcceleration(&balle_joueur1,0.5);
-	          				setAcceleration(&balle_joueur2,0.5);
-
-			            break;
-
-	            		default:break;
-	         	} 
-	        	default:break;
-
-	      	}
-    	}
-    
-		Uint32 elapsedTime = SDL_GetTicks() - startTime;
-	    if(elapsedTime < FRAMERATE_MILLISECONDS) {
-	      	SDL_Delay(FRAMERATE_MILLISECONDS - elapsedTime);
-	    }
+		detruireTextures(&textures_briques);
+		detruireTextures(&textures_barres);
+		detruireBriques(arrayBrique,nbBriques);
+	 	glBindTexture(GL_TEXTURE_2D,0);
+	    glDeleteTextures(1,&texture_wallpaper);
+	    Mix_FreeMusic(musique_game);
 	}
 
-	detruireTextures(&textures_briques);
-	detruireBriques(arrayBrique,nbBriques);
- 	glBindTexture(GL_TEXTURE_2D,0);
-    glDeleteTextures(1,&texture_wallpaper);
-    Mix_FreeMusic(musique_game);
     Mix_CloseAudio();
     Mix_Quit();
   	SDL_Quit(); 

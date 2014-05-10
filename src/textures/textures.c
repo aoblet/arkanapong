@@ -84,6 +84,7 @@ void loadTexturesBriques(Textures * textures, char * theme){
 void loadTexturesMenu(Textures * textures){
 	char * chemin_menu = "../img/menu/";
 	char chemin_menu_copy[1000];
+	textures->nb_textures = NB_TEXTURES_MENU;
 
 	loadTexture( &(textures->identifiants[TEXTURE_START_GAME_ON]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/start/on/1.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_START_GAME_OFF]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/start/off/1.png"));
@@ -118,6 +119,22 @@ void loadTexturesMenu(Textures * textures){
 	loadTexture( &(textures->identifiants[TEXTURE_WALLPAPER_ESPACE]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"wallpaper/espace.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_WALLPAPER_FLAT]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"wallpaper/flat.png"));
 
+}
+
+void loadTexturesBarres(Textures * textures, char * theme){
+	textures->nb_textures = NB_TEXTURES_BARRES;
+	
+	char theme_string_safe[50];
+	strcpy(theme_string_safe,theme);
+	char chemin_barres[50], chemin_barres_copy[5000];
+
+	sprintf(chemin_barres,"../img/themes/%s/barre/",theme_string_safe);
+
+	if(!(!strcmp(theme_string_safe,"espace") || !strcmp(theme_string_safe,"mario") || !strcmp(theme_string_safe,"flat") ))
+		exit(EXIT_FAILURE);
+
+	loadTexture( &(textures->identifiants[TEXTURE_BARRE_BAS]) , 	strcat(strcpy(chemin_barres_copy,chemin_barres),"bas/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_BARRE_HAUT]) ,	strcat(strcpy(chemin_barres_copy,chemin_barres),"haut/1.png"));
 }
 
 void detruireTextures(Textures * textures){

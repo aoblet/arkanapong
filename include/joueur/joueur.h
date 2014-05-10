@@ -18,7 +18,8 @@ typedef struct Joueur{
 	int vie;
 	Barre * barre;
 	Bonus * bonus;
-	int nb_coups;
+	int nb_coups_barre;
+	int nb_coups_briques;
 }Joueur;
 
 Joueur initJoueur(char * nom, char * prenom, int vie, Barre * barre);

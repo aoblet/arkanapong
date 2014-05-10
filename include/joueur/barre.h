@@ -4,7 +4,7 @@
 
 #ifndef __BARRE_H__
 #define __BARRE_H__
-
+#include <GL/gl.h>
 
 typedef struct Barre {
 	float xPos;
@@ -16,6 +16,7 @@ typedef struct Barre {
 	int rouge;
 	int vert;
 	int bleu;
+	GLuint texture;
 }Barre;
 
 Barre initBarre(float xPos, float yPos, float xSize, float ySize, float xVitesse, int rouge, int vert, int bleu);

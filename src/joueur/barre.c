@@ -14,6 +14,7 @@ Barre initBarre(float xPos, float yPos, float xSize, float ySize, float xVitesse
 	b.rouge = rouge;
 	b.vert = vert;
 	b.bleu = bleu;
+	b.texture = 0;
 	return b;
 }
 
@@ -39,10 +40,28 @@ void dessinBarre(Barre * barre){
 
 	if(barre != NULL){
 		glPushMatrix();
-			glColor3ub(barre->rouge, barre->vert, barre->bleu);
-			glTranslatef(barre->xPos,barre->yPos,0);
-			glScalef(barre->xSize,barre->ySize,0);
-			dessinCarreCanonique();
+			glEnable(GL_TEXTURE_2D );
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture(GL_TEXTURE_2D, barre->texture);
+
+			glBegin(GL_QUADS);
+			glTexCoord2f(0,1);
+			glVertex2f(barre->xPos-barre->xSize/2,barre->yPos-(barre->ySize/2));
+
+			glTexCoord2f(1,1);
+			glVertex2f(barre->xPos+(barre->xSize/2),barre->yPos-(barre->ySize/2));
+
+			glTexCoord2f(1,0);
+			glVertex2f(barre->xPos+(barre->xSize/2),barre->yPos+(barre->ySize/2));
+
+			glTexCoord2f(0,0);
+			glVertex2f(barre->xPos-(barre->xSize/2),barre->yPos+(barre->ySize/2));
+			glEnd();
+			glDisable(GL_BLEND);
+
+			glBindTexture(GL_TEXTURE_2D, 0);
+			glDisable(GL_TEXTURE_2D);
 		glPopMatrix();
 	}
 }

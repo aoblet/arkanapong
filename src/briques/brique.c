@@ -221,6 +221,7 @@ void handleBriqueBalles(Brique ** brique, int nbBalles, Textures textures){
 					setAngleVitesseBalle(balle,M_PI-balle->angleVitesse);
 				}
 
+				balle->joueur->nb_coups_briques++;
 				handleCollisionBrique(brique,&((*brique)->balles[i]),textures);
 			}
 		}

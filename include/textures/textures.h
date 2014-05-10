@@ -45,10 +45,16 @@
 #define TEXTURE_WALLPAPER_MARIO			24
 #define TEXTURE_WALLPAPER_ESPACE		25
 #define TEXTURE_WALLPAPER_FLAT			26
+#define NB_TEXTURES_MENU				26
 
 
+//barre
+#define TEXTURE_BARRE_BAS 0
+#define TEXTURE_BARRE_HAUT 1
+#define NB_TEXTURES_BARRES 2
 
-#define NB_TEXTURES_MAX 30
+
+#define NB_TEXTURES_MAX 26
 
 #include <GL/gl.h>
 
@@ -60,6 +66,7 @@ typedef struct{
 
 void loadTexturesBriques(Textures * textures, char * theme);
 void loadTexturesMenu(Textures * textures);
+void loadTexturesBarres(Textures * textures, char * menu);
 void loadTexture(GLuint * id, char * chemin_fichier);
 void detruireTextures(Textures * textures);
 

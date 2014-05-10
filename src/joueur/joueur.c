@@ -9,7 +9,8 @@ Joueur initJoueur(char * nom, char * prenom, int vie, Barre * barre){
 	j.vie = vie;
 	j.barre = barre;
 	j.bonus = NULL;
-	j.nb_coups = 0;
+	j.nb_coups_barre = 0;
+	j.nb_coups_briques = 0;
 	return j;
 }
 
