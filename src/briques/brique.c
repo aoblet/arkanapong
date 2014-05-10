@@ -1,11 +1,12 @@
-#include "briques/brique.h"
+#include <math.h>
 #include <GL/gl.h>
 #include <stdlib.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include "joueur/joueur.h"
 #include "joueur/barre.h"
-
+#include "briques/bonus.h"
+#include "briques/brique.h"
 
 Brique * initBrique(float xPos, float yPos, float xSize, float ySize, Balle ** balles){
 	Brique * b = (Brique*)malloc(sizeof(Brique));
@@ -21,8 +22,16 @@ Brique * initBrique(float xPos, float yPos, float xSize, float ySize, Balle ** b
 }
 
 void detruireBrique(Brique ** brique){
-	if(brique !=NULL && *brique!= NULL)
+	if(brique !=NULL && *brique!= NULL){
+		free(*brique);
 		*brique = NULL;
+	}
+}
+
+void detruireBriques(Brique ** briques, int nbBriques){
+	int i;
+	for(i=0 ; i<nbBriques; i++)
+		detruireBrique(&(briques[i]));
 }
 
 void setPositionBrique(Brique ** brique, float xPos, float yPos){
@@ -70,79 +79,104 @@ void dessinBrique(Brique * brique){
 void configureBrique(Brique ** brique, int type,Textures textures){
 	if(brique != NULL){
 		(*brique)->type_brique = type;
-		if(type == 0){ 
-			setTextureBrique(brique,textures.identifiants[CLASSIQUE_1]);
+		if(type == BRIQUE_CLASSIQUE){ 
+			setTextureBrique(brique,textures.identifiants[TEXTURE_CLASSIQUE_1]);
 		}
-		else if(type == 1){
-			setTextureBrique(brique,textures.identifiants[INDESTRUCTIBLE_1]);
+		else if(type == BRIQUE_INDESTRUCTIBLE){
+			setTextureBrique(brique,textures.identifiants[TEXTURE_INDESTRUCTIBLE_1]);
 		}
-		else if(type == 2){
+		else if(type == BRIQUE_AGRANDISSEMENT_BARRE){
 			(*brique)->vie = 3;
-			setTextureBrique(brique,textures.identifiants[AGRANDISSEMENT_BARRE_3]);
+			setTextureBrique(brique,textures.identifiants[TEXTURE_AGRANDISSEMENT_BARRE_3]);
 		}
-		else if(type == 3){
-			setTextureBrique(brique,textures.identifiants[REDUCTION_BARRE_1]);
+		else if(type == BRIQUE_REDUCTION_BARRE){
+			setTextureBrique(brique,textures.identifiants[TEXTURE_REDUCTION_BARRE_1]);
 		}
-		else if(type == 4){
+		else if(type == BRIQUE_VITESSE_PLUS_BALLE){
 			(*brique)->vie = 2;
-			setTextureBrique(brique,textures.identifiants[VITESSE_PLUS_BALLE_2]);
+			setTextureBrique(brique,textures.identifiants[TEXTURE_VITESSE_PLUS_BALLE_2]);
 		}
-		else if(type == 5){
+		else if(type == BRIQUE_VITESSE_MOINS_BALLE){
 			(*brique)->vie = 2;
-			setTextureBrique(brique,textures.identifiants[VITESSE_MOINS_BALLE_2]);
+			setTextureBrique(brique,textures.identifiants[TEXTURE_VITESSE_MOINS_BALLE_2]);
+		}
+		else if(type == BRIQUE_INVERSION_VITESSE_BARRE){
+			(*brique)->vie = 1;
+			setTextureBrique(brique,textures.identifiants[TEXTURE_INVERSION_VITESSE_BARRE_1]);
+		}
+		else if(type == BRIQUE_VITESSE_BARRE){
+			(*brique)->vie = 3;
+			setTextureBrique(brique,textures.identifiants[TEXTURE_VITESSE_BARRE_3]);
 		}
 	}
 }
 
 void handleCollisionBrique(Brique ** brique, Balle ** balle,Textures textures){
+	//base de frame rate 1000/60
 	if(brique != NULL && *brique!=NULL){
-		if((*brique)->type_brique == 0){
+		if((*brique)->type_brique == BRIQUE_CLASSIQUE){
 			if( ((*brique)->vie-=1) <= 0)
 				detruireBrique(brique);
 		}
-		else if((*brique)->type_brique == 1){
+		else if((*brique)->type_brique == BRIQUE_INDESTRUCTIBLE){
 			// rien à faire:indestructible
 		}
-		else if((*brique)->type_brique == 2){
+		else if((*brique)->type_brique == BRIQUE_AGRANDISSEMENT_BARRE){
 			(*brique)->vie -=1;
 
 			if( (*brique)->vie == 2){
-				setTextureBrique(brique,textures.identifiants[AGRANDISSEMENT_BARRE_2]);
+				setTextureBrique(brique,textures.identifiants[TEXTURE_AGRANDISSEMENT_BARRE_2]);
 			}
 			else if( (*brique)->vie == 1){
-				setTextureBrique(brique,textures.identifiants[AGRANDISSEMENT_BARRE_1]);
+				setTextureBrique(brique,textures.identifiants[TEXTURE_AGRANDISSEMENT_BARRE_1]);
 			}
 			else{
 				//success
-				Barre ** barre_joueur =  &(((*balle)->joueur)->barre);
-				(*barre_joueur)->xSize*=2;
+				addBonusJoueur((*balle)->joueur,60*5,BONUS_AGRANDISSEMENT_BARRE,2); // 5 secondes
 				detruireBrique(brique);
 			}
 		}
-		else if((*brique)->type_brique == 3){
+		else if((*brique)->type_brique == BRIQUE_REDUCTION_BARRE){
 			if( ((*brique)->vie-=1) <= 0){
-				Barre ** barre_joueur = &((*balle)->joueur->barre);
-				(*barre_joueur)->xSize /=2;
+				addBonusJoueur((*balle)->joueur,60*7,BONUS_REDUCTION_BARRE,0.5); // 7secondes
 				detruireBrique(brique);
 			}
 		}
-		else if((*brique)->type_brique == 4){
+		else if((*brique)->type_brique == BRIQUE_VITESSE_PLUS_BALLE){
 			if( ((*brique)->vie-=1) == 1){
-				setTextureBrique(brique,textures.identifiants[VITESSE_PLUS_BALLE_1]);
+				setTextureBrique(brique,textures.identifiants[TEXTURE_VITESSE_PLUS_BALLE_1]);
 			}
 			else{
-				(*balle)->xVitesse *= 2;
-				(*balle)->yVitesse *= 2;
+				addBonusBalle((*balle),60*5,BONUS_VITESSE_BALLE,1.3);
 				detruireBrique(brique);
 			}
 		}
-		else if((*brique)->type_brique == 5){
+		else if((*brique)->type_brique == BRIQUE_VITESSE_MOINS_BALLE){
 			if( ((*brique)->vie-=1) == 1){
-				setTextureBrique(brique,textures.identifiants[VITESSE_MOINS_BALLE_1]);
+				setTextureBrique(brique,textures.identifiants[TEXTURE_VITESSE_MOINS_BALLE_1]);
 			}
 			else{
-				(*balle)->xVitesse /= 2;
-				(*balle)->yVitesse /= 2;
+				addBonusBalle((*balle),60*5,BONUS_VITESSE_BALLE,0.5);
+				detruireBrique(brique);
+			}
+		}
+		else if((*brique)->type_brique == BRIQUE_INVERSION_VITESSE_BARRE){
+			if( ((*brique)->vie-=1) <= 0){
+				addBonusJoueur((*balle)->joueur,60*3,BONUS_INVERSION_VITESSE_BARRE,0); // 3secondes
+				detruireBrique(brique);
+			}
+		}
+		else if((*brique)->type_brique == BRIQUE_VITESSE_BARRE){
+			(*brique)->vie -=1;
+			if( (*brique)->vie == 2){
+				setTextureBrique(brique,textures.identifiants[TEXTURE_VITESSE_BARRE_2]);
+			}
+			else if( (*brique)->vie == 1){
+				setTextureBrique(brique,textures.identifiants[TEXTURE_VITESSE_BARRE_1]);
+			}
+			else{
+				//success
+				addBonusJoueur((*balle)->joueur,60*5,BONUS_VITESSE_BARRE,2); // 5 secondes
 				detruireBrique(brique);
 			}
 		}
@@ -155,66 +189,43 @@ void handleBriqueBalles(Brique ** brique, int nbBalles, Textures textures){
 	for(i=0;i<nbBalles;i++){
 		if(brique != NULL && *brique != NULL){
 			Balle * balle = (*brique)->balles[i];
-			float extremiteBalleDroit 	= balle->xPos + balle->rayon;
-			float extremiteBalleGauche 	= balle->xPos - balle->rayon;
-			float extremiteBalleHaut 	= balle->yPos + balle->rayon;
-			float extremiteBalleBas 	= balle->yPos - balle->rayon;
+				  //extremites balles
+			float extremiteBalleDroit 	= balle->xPos + balle->rayon, extremiteBalleGauche = balle->xPos - balle->rayon,
+				  extremiteBalleHaut 	= balle->yPos + balle->rayon, extremiteBalleBas    = balle->yPos - balle->rayon,
+				  //extremites briques
+				  extremiteBriqueHaut 	= (*brique)->yPos+(*brique)->ySize/2, extremiteBriqueBas 	= (*brique)->yPos-(*brique)->ySize/2,
+				  extremiteBriqueDroit	= (*brique)->xPos+(*brique)->xSize/2, extremiteBriqueGauche	= (*brique)->xPos-(*brique)->xSize/2;
 
-			float extremiteBriqueHaut 	= (*brique)->yPos+(*brique)->ySize/2;
-			float extremiteBriqueBas 	= (*brique)->yPos-(*brique)->ySize/2;
-			float extremiteBriqueDroit	= (*brique)->xPos+(*brique)->xSize/2;
-			float extremiteBriqueGauche	= (*brique)->xPos-(*brique)->xSize/2;
+			// tappe dans la brique
+			if(	extremiteBalleGauche < extremiteBriqueDroit && extremiteBalleDroit > extremiteBriqueGauche && extremiteBalleHaut > extremiteBriqueBas && extremiteBalleBas<extremiteBriqueHaut){
+				
+				float 	coeff_directeur_balle_brique = fabs((balle->yPos - (*brique)->yPos)/(balle->xPos - (*brique)->xPos)),
+						coeff_directeur_diagonale_brique = (*brique)->ySize/(*brique)->xSize;
 
-
-			if(balle->yVitesse>0){
-
-				if(extremiteBalleHaut > extremiteBriqueBas && extremiteBalleBas < extremiteBriqueHaut){
-				// tappe extremite gauche
-					if(extremiteBalleGauche < extremiteBriqueGauche && extremiteBalleDroit > extremiteBriqueGauche){
-						balle->xVitesse *=-1;
-						setPositionBalle(balle, extremiteBriqueGauche-balle->rayon, balle->yPos);
-						handleCollisionBrique(brique,&((*brique)->balles[i]),textures);
-
-					}
-					// tappe extremite droit
-					else if(extremiteBalleDroit > extremiteBriqueDroit && extremiteBalleGauche < extremiteBriqueDroit){
-						balle->xVitesse *=-1;
-						setPositionBalle(balle, extremiteBriqueDroit+balle->rayon, balle->yPos);
-						handleCollisionBrique(brique,&((*brique)->balles[i]),textures);
-
-					}
-					else if(extremiteBalleGauche < extremiteBriqueDroit && extremiteBalleDroit > extremiteBriqueGauche ){
-						setPositionBalle(balle,balle->xPos, extremiteBriqueBas-balle->rayon);
-						balle->yVitesse *=-1;
-						handleCollisionBrique(brique,&((*brique)->balles[i]),textures);
-
-					}
-				}
-			}
-			else{
-				if(extremiteBalleBas < extremiteBriqueHaut && extremiteBalleHaut > extremiteBriqueBas){
-					if(extremiteBalleGauche < extremiteBriqueGauche && extremiteBalleDroit > extremiteBriqueGauche){
-						balle->xVitesse *=-1;
-						setPositionBalle(balle, extremiteBriqueGauche-balle->rayon, balle->yPos);
-						handleCollisionBrique(brique,&((*brique)->balles[i]),textures);
-						printf("tappe gauche\n");
-					}
-
-					else if(extremiteBalleDroit > extremiteBriqueDroit && extremiteBalleGauche < extremiteBriqueDroit){
-						balle->xVitesse *=-1;
-						setPositionBalle(balle, extremiteBriqueDroit+balle->rayon, balle->yPos);
-						handleCollisionBrique(brique,&((*brique)->balles[i]),textures);
-						printf("tappe droit\n");
-					}
-					else if(extremiteBalleGauche < extremiteBriqueDroit && extremiteBalleDroit > extremiteBriqueGauche ){
-						balle->yVitesse *=-1;
+				//haut ou bas
+				if(coeff_directeur_balle_brique>coeff_directeur_diagonale_brique){
+					if(balle->angleVitesse <= M_PI && balle->angleVitesse >=0)
+						setPositionBalle(balle, balle->xPos, extremiteBriqueBas-balle->rayon);
+					else
 						setPositionBalle(balle, balle->xPos, extremiteBriqueHaut+balle->rayon);
-						handleCollisionBrique(brique,&((*brique)->balles[i]),textures);
 
-					}
+					setAngleVitesseBalle(balle,-balle->angleVitesse);
 				}
+				else{
+					//les cotes
+					if((balle->angleVitesse < M_PI/2 && balle->angleVitesse > 0) || (balle->angleVitesse < 2.0*M_PI && balle->angleVitesse > 3*M_PI/2)) // gauche
+						setPositionBalle(balle, extremiteBriqueGauche-balle->rayon,balle->yPos);
+					else
+						setPositionBalle(balle, extremiteBriqueDroit+balle->rayon,balle->yPos);
+					
+					setAngleVitesseBalle(balle,M_PI-balle->angleVitesse);
+				}
+
+				handleCollisionBrique(brique,&((*brique)->balles[i]),textures);
 			}
 		}
 	}
 }
+
+
 

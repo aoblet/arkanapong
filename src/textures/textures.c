@@ -55,18 +55,35 @@ void loadTexture(GLuint * id, char * chemin_texture){
 
 
 void loadTexturesBriques(Textures * textures, char * theme){
-	if(!strcmp(theme,"default")){
-		loadTexture( &(textures->identifiants[CLASSIQUE_1]) , 				"../img/themes/default/briques/classique/1.png");
-		loadTexture( &(textures->identifiants[INDESTRUCTIBLE_1]) , 			"../img/themes/default/briques/indestructible/1.png");
-		loadTexture( &(textures->identifiants[AGRANDISSEMENT_BARRE_3]) , 	"../img/themes/default/briques/agrandissement_barre/3.png");
-		loadTexture( &(textures->identifiants[AGRANDISSEMENT_BARRE_2]) ,	"../img/themes/default/briques/agrandissement_barre/2.png");
-		loadTexture( &(textures->identifiants[AGRANDISSEMENT_BARRE_1]) , 	"../img/themes/default/briques/agrandissement_barre/1.png");
-		//loadTexture( textures->identifiants[REDUCTION_BARRE_1] , 		"../img/themes/default/briques/reduction_barre/1.png");
-		loadTexture( &(textures->identifiants[VITESSE_PLUS_BALLE_2]) , 		"../img/themes/default/briques/vitesse_plus_balle/2.png");
-		loadTexture( &(textures->identifiants[VITESSE_PLUS_BALLE_1]) , 		"../img/themes/default/briques/vitesse_plus_balle/1.png");
-		//loadTexture( textures->identifiants[VITESSE_MOINS_BALLE_2] , 	"../img/themes/default/briques/vitesse_moins_balle/2.png");
-		//loadTexture( textures->identifiants[VITESSE_MOINS_BALLE_1] , 	"../img/themes/default/briques/vitesse_moins_balle/1.png");
-	}		
-	//else if(!strcmp(theme,""))	
+	textures->nb_textures = NB_TEXTURES;
+	char theme_string_safe[50];
+	strcpy(theme_string_safe,theme);
+
+	if(!strcmp(theme_string_safe,"default") || !strcmp(theme_string_safe,"flat")){
+		strcpy(theme_string_safe,"default");
+	}
+	else if (!(!strcmp(theme_string_safe,"espace") || !strcmp(theme_string_safe,"mario")))
+		exit(EXIT_FAILURE);
+	
+	char chemin_theme[50], chemin_theme_copy[5000];
+	sprintf(chemin_theme,"../img/themes/%s/briques/",theme_string_safe);
+	strcpy(chemin_theme_copy,chemin_theme);
+	loadTexture( &(textures->identifiants[TEXTURE_CLASSIQUE_1]) , 				strcat(strcpy(chemin_theme_copy,chemin_theme),"classique/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_INDESTRUCTIBLE_1]) , 			strcat(strcpy(chemin_theme_copy,chemin_theme),"indestructible/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_AGRANDISSEMENT_BARRE_3]) , 	strcat(strcpy(chemin_theme_copy,chemin_theme),"agrandissement_barre/3.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_AGRANDISSEMENT_BARRE_2]) ,	strcat(strcpy(chemin_theme_copy,chemin_theme),"agrandissement_barre/2.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_AGRANDISSEMENT_BARRE_1]) , 	strcat(strcpy(chemin_theme_copy,chemin_theme),"agrandissement_barre/1.png"));
+	//loadTexture( textures->identifiants[TEXTURE_REDUCTION_BARRE_1] , 			strcat(strcpy(chemin_theme_copy,chemin_theme),"reduction_barre/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_VITESSE_PLUS_BALLE_2]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_plus_balle/2.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_VITESSE_PLUS_BALLE_1]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_plus_balle/1.png"));
+	//loadTexture( textures->identifiants[TEXTURE_VITESSE_MOINS_BALLE_2] , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_moins_balle/2.png"));
+	//loadTexture( textures->identifiants[TEXTURE_VITESSE_MOINS_BALLE_1] , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_moins_balle/1.png"));
+	//loadTexture( textures->identifiants[TEXTURE_INVERSION_VITESSE_BARRE_1] , 	strcat(strcpy(chemin_theme_copy,chemin_theme),"inversion_vitesse_barre/1.png"));
+	//loadTexture( textures->identifiants[TEXTURE_VITESSE_BARRE_3] , 			strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_barre/3.png"));
+	//loadTexture( textures->identifiants[TEXTURE_VITESSE_BARRE_2] , 			strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_barre/2.png"));
+	//loadTexture( textures->identifiants[TEXTURE_VITESSE_BARRE_1] , 			strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_barre/1.png"));
 }
 
+void detruireTextures(Textures * textures){
+	glDeleteTextures(textures->nb_textures,textures->identifiants);
+}

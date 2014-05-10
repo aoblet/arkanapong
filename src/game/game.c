@@ -7,8 +7,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-
+#include <math.h>
+#include <time.h>
 
 void initScreenGame(Barre * barrej1, Barre * barrej2, Balle * ballej1, Balle * ballej2, float abcisseRepereMax, float ordonneRepereMax){
 	setBarreJ1ToScreen(barrej1,ordonneRepereMax);
@@ -26,8 +26,12 @@ void stopGame(Barre * barrej1, Barre * barrej2, Balle * ballej1, Balle * ballej2
 }
 
 void initVitesseBalles(Balle * ballej1, Balle * ballej2){
-	setVecteurVitesse(ballej1,2,2);
-	setVecteurVitesse(ballej2,-2,-2);
+	setNormeVitesseBalle(ballej1,1);
+	setNormeVitesseBalle(ballej2,1);
+	srand(time(NULL));
+
+	setAngleVitesseBalle(ballej1,fmod(rand(),M_PI));
+	setAngleVitesseBalle(ballej2,-fmod(rand(),M_PI));
 }
 
 void initVitesseBarres(Barre * barrej1, Barre * barrej2){
@@ -68,15 +72,21 @@ void loadGame(	char * theme, GLuint * texture_wallpaper, char * nomlevel, Brique
 
 	/***** CHARGEMENT LEVEL *******/
 	FILE * file = NULL;
+	char chemin_level[100];
 
 	if(!strcmp(nomlevel,"classique")){
-		file = fopen("../level/classique.txt","r");
+		strcpy(chemin_level,"../level/classique.txt");
 
+	}
+	else if(!strcmp(nomlevel,"a")){
+		strcpy(chemin_level,"../level/a.txt");
 	}
 	else{
 		fprintf(stderr, "niveau inconnu");
 		exit(EXIT_FAILURE);
 	}
+
+	file = fopen(chemin_level,"r");
 
 	if(file == NULL){
 		fprintf(stderr, "erreur chargment %s",nomlevel );
@@ -96,7 +106,7 @@ void loadGame(	char * theme, GLuint * texture_wallpaper, char * nomlevel, Brique
 
 	*nbBriques = nbBriquesXFile*nbBriquesYFile;
 
-	float 	ySize = 10, 
+	float 	ySize = 20, 
 			xSize = abcisseRepereMax*2/(float)nbBriquesXFile, 
 			xPos=-abcisseRepereMax+(xSize/2),
 			yPos=ySize*nbBriquesYFile/2;
@@ -147,4 +157,11 @@ void handleGrilleBrique(Brique ** briques_array, int nbBriques, int nbBalles, Te
 		handleBriqueBalles(&(briques_array[i]), nbBalles,textures_briques);
 	}
 	
-}		
+}
+
+void initBonusJoueurs(Joueur * j1,Joueur * j2){
+	if(j1 != NULL)
+		detruireBonusJoueur(j1);
+	if(j2 != NULL)
+		detruireBonusJoueur(j2);
+}

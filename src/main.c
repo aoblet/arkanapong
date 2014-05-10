@@ -55,20 +55,15 @@ int main(int argc, char * argv []){
 
 
   	/******** INIT SCREEN & JOUEUR *******/
-  	Barre barre_joueur1 = initBarre(0,0,60,5,2,151,187,205);
-  	Joueur j1 = initJoueur("Alexis","Oblet",20,&barre_joueur1);
-  	Balle balle_joueur1 = initBalle(0,-170,0,0,5,151,187,205,&j1);
+  	float default_taille_barre_x = 60, default_taille_barre_y = 5, x_vitesse_barre_default = 5, norme_vitesse_balle_default = 3;
 
-  	Barre barre_joueur2 = initBarre(0,0,60,5,2,255,204,0);
-  	Joueur j2 = initJoueur("Machine","Invincible",20,&barre_joueur2);
-  	Balle balle_joueur2 = initBalle(0,170,0,0,5,255,204,0,&j2);
+  	Barre barre_joueur1 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,151,187,205);
+  	Joueur j1 = initJoueur("Alexis","Oblet",10,&barre_joueur1);
+  	Balle balle_joueur1 = initBalle(0,-ORDONNE_REPERE_MAX+30,0,0,5,151,187,205,&j1);
 
-
-  	setBarresToBalle(&balle_joueur1, &barre_joueur1,&barre_joueur2);
-  	setBarresToBalle(&balle_joueur2, &barre_joueur1,&barre_joueur2);
-	
-	initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
-
+  	Barre barre_joueur2 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,255,204,0);
+  	Joueur j2 = initJoueur("Machine","Invincible",10,&barre_joueur2);
+  	Balle balle_joueur2 = initBalle(0,ORDONNE_REPERE_MAX-30,0,0,5,255,204,0,&j2);
 
 
 	/**********INIT GAME**************/
@@ -79,8 +74,7 @@ int main(int argc, char * argv []){
 	int nbBriques,nbBalles = 2;
 	Balle * balles[2]={&balle_joueur1,&balle_joueur2};
 	loadGame("default", &texture_wallpaper, "classique", &arrayBrique,balles, &nbBriques, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX,&textures_briques);
-
-	printf("Briques adr apres %p\n",arrayBrique );
+	initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
 
 
   	int loop=1;
@@ -97,16 +91,16 @@ int main(int argc, char * argv []){
 	    dessinWallpaper(texture_wallpaper,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
 
 	    dessinBalle(&balle_joueur1,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
-	    dessinBalle(&balle_joueur2,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
+	   	dessinBalle(&balle_joueur2,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
 	   	dessinBarre(&barre_joueur1);
 	    dessinBarre(&barre_joueur2);
-
 	    dessinBriques(arrayBrique,nbBriques);
 
 	    SDL_GL_SwapBuffers(); 
 	    /* fin dessin */
 
 	    if(!partie_stopped){
+
 		    //gestion touche enfoncée
 		    Uint8 *keystates = SDL_GetKeyState(NULL);
 		    //joueur 1
@@ -121,7 +115,15 @@ int main(int argc, char * argv []){
 		    else if(keystates[ SDLK_e])
 		    	deplacerBarreX(&barre_joueur2,-1,ABCISSE_REPERE_MAX);
 
-		    
+		    /************BARRES****************/
+			handleBalleBarres(&balle_joueur1,&j1,&j2);
+			handleBalleBarres(&balle_joueur2,&j1,&j2);
+
+		    /***********BONUS******************/
+		    updateBonusJoueur(&j1,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default);
+		    updateBonusJoueur(&j2,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default);
+		    updateBonusBalle(&balle_joueur1,norme_vitesse_balle_default);
+		    updateBonusBalle(&balle_joueur2,norme_vitesse_balle_default);
 
 		    /*************BRIQUES ***************/
 			handleGrilleBrique(arrayBrique, nbBriques, nbBalles,textures_briques);
@@ -191,7 +193,7 @@ int main(int argc, char * argv []){
 	           			break;
 	      	    		
 	      	    		case SDLK_RETURN :
-	      	    		initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
+	      	    				initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
 								//vitesse default balles
 								initVitesseBalles(&balle_joueur1,&balle_joueur2);
 								initVitesseBarres(&barre_joueur1,&barre_joueur2);
@@ -200,6 +202,7 @@ int main(int argc, char * argv []){
 								//vitesse default balles
 								initVitesseBalles(&balle_joueur1,&balle_joueur2);
 								initVitesseBarres(&barre_joueur1,&barre_joueur2);
+								initBonusJoueurs(&j1,&j2);
 								partie_stopped = 0;
 								printf("Vie joueur 1: %d\n", j1.vie );
 								printf("Vie joueur 2: %d\n", j2.vie );
@@ -237,6 +240,8 @@ int main(int argc, char * argv []){
 	    }
 	}
 
+	detruireTextures(&textures_briques);
+	detruireBriques(arrayBrique,nbBriques);
  	glBindTexture(GL_TEXTURE_2D,0);
     glDeleteTextures(1,&texture_wallpaper);
   	SDL_Quit(); 
