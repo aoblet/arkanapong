@@ -7,7 +7,9 @@
 
 
 void loadTexture(GLuint * id, char * chemin_texture){
-	SDL_Surface * img = IMG_Load(chemin_texture);
+	
+	    glGenTextures(1,id);
+	    SDL_Surface * img = IMG_Load(chemin_texture);
 
 	if(img != NULL){
 	    GLenum format;
@@ -29,15 +31,13 @@ void loadTexture(GLuint * id, char * chemin_texture){
 		    exit(EXIT_FAILURE);
 		}
 
-	    glGenTextures(1,id);
-
 	    if(id!= 0){
 			glBindTexture(GL_TEXTURE_2D,*id);
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 
 			// GL_UNSIGNED_BYTE -> composante de couleur géré sur SDL
-			glTexImage2D( GL_TEXTURE_2D,0, GL_RGB, img->w, img->h, 0, format, GL_UNSIGNED_BYTE, img->pixels);
+			glTexImage2D( GL_TEXTURE_2D,0, GL_RGBA, img->w, img->h, 0, format, GL_UNSIGNED_BYTE, img->pixels);
 			SDL_FreeSurface(img);
 	    }
 	    else{
@@ -59,10 +59,7 @@ void loadTexturesBriques(Textures * textures, char * theme){
 	char theme_string_safe[50];
 	strcpy(theme_string_safe,theme);
 
-	if(!strcmp(theme_string_safe,"default") || !strcmp(theme_string_safe,"flat")){
-		strcpy(theme_string_safe,"default");
-	}
-	else if (!(!strcmp(theme_string_safe,"espace") || !strcmp(theme_string_safe,"mario")))
+	if(!(!strcmp(theme_string_safe,"espace") || !strcmp(theme_string_safe,"mario") || !strcmp(theme_string_safe,"flat") ))
 		exit(EXIT_FAILURE);
 	
 	char chemin_theme[50], chemin_theme_copy[5000];
@@ -73,15 +70,15 @@ void loadTexturesBriques(Textures * textures, char * theme){
 	loadTexture( &(textures->identifiants[TEXTURE_AGRANDISSEMENT_BARRE_3]) , 	strcat(strcpy(chemin_theme_copy,chemin_theme),"agrandissement_barre/3.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_AGRANDISSEMENT_BARRE_2]) ,	strcat(strcpy(chemin_theme_copy,chemin_theme),"agrandissement_barre/2.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_AGRANDISSEMENT_BARRE_1]) , 	strcat(strcpy(chemin_theme_copy,chemin_theme),"agrandissement_barre/1.png"));
-	//loadTexture( &(textures->identifiants[TEXTURE_REDUCTION_BARRE_1]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"reduction_barre/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_REDUCTION_BARRE_1]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"reduction_barre/1.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_VITESSE_PLUS_BALLE_2]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_plus_balle/2.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_VITESSE_PLUS_BALLE_1]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_plus_balle/1.png"));
-	//loadTexture( &(textures->identifiants[TEXTURE_VITESSE_MOINS_BALLE_2]) , 	strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_moins_balle/2.png"));
-	//loadTexture( &(textures->identifiants[TEXTURE_VITESSE_MOINS_BALLE_1]) , 	strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_moins_balle/1.png"));
-	//loadTexture( &(textures->identifiants[TEXTURE_INVERSION_VITESSE_BARRE_1]) , strcat(strcpy(chemin_theme_copy,chemin_theme),"inversion_vitesse_barre/1.png"));
-	//loadTexture( &(textures->identifiants[TEXTURE_VITESSE_BARRE_3]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_barre/3.png"));
-	//loadTexture( &(textures->identifiants[TEXTURE_VITESSE_BARRE_2]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_barre/2.png"));
-	//loadTexture( &(textures->identifiants[TEXTURE_VITESSE_BARRE_1]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_barre/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_VITESSE_MOINS_BALLE_2]) , 	strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_moins_balle/2.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_VITESSE_MOINS_BALLE_1]) , 	strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_moins_balle/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_INVERSION_VITESSE_BARRE_1]) , strcat(strcpy(chemin_theme_copy,chemin_theme),"inversion_vitesse_barre/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_VITESSE_BARRE_3]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_barre/3.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_VITESSE_BARRE_2]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_barre/2.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_VITESSE_BARRE_1]) , 		strcat(strcpy(chemin_theme_copy,chemin_theme),"vitesse_barre/1.png"));
 }
 
 void loadTexturesMenu(Textures * textures){
@@ -120,6 +117,7 @@ void loadTexturesMenu(Textures * textures){
 	loadTexture( &(textures->identifiants[TEXTURE_WALLPAPER_MARIO]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"wallpaper/mario.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_WALLPAPER_ESPACE]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"wallpaper/espace.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_WALLPAPER_FLAT]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"wallpaper/flat.png"));
+
 }
 
 void detruireTextures(Textures * textures){

@@ -10,6 +10,7 @@ typedef struct Item_menu{
 	GLuint textures[10][2]; //2d -> on_off
 	int nb_elements;
 	int indice_courant;
+	int on_off;
 	char values[10][50];
 }Item_menu;
 

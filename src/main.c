@@ -9,8 +9,9 @@
 #include "joueur/barre.h"
 #include "game/game.h"
 #include "textures/textures.h"
+#include "game/masterLauncher.h"
 
-static unsigned int WINDOW_WIDTH = 800;
+static unsigned int WINDOW_WIDTH = 1000;
 static unsigned int WINDOW_HEIGHT = 800;
 
 static float ABCISSE_REPERE_MAX = 200;
@@ -51,13 +52,12 @@ int main(int argc, char * argv []){
 
  	setVideoMode();
   	SDL_WM_SetCaption("Arkana", NULL);
-
-
+	
 
   	/******** INIT SCREEN & JOUEUR *******/
   	float default_taille_barre_x = 60, default_taille_barre_y = 5, x_vitesse_barre_default = 5, norme_vitesse_balle_default = 3;
 
-  	Barre barre_joueur1 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,151,187,205);
+  	Barre barre_joueur1 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,100,187,205);
   	Joueur j1 = initJoueur("Alexis","Oblet",10,&barre_joueur1);
   	Balle balle_joueur1 = initBalle(0,-ORDONNE_REPERE_MAX+30,0,0,5,151,187,205,&j1);
 
@@ -70,14 +70,110 @@ int main(int argc, char * argv []){
 	Brique ** arrayBrique = NULL;
   	GLuint texture_wallpaper;
   	Textures textures_briques;
-
 	int nbBriques,nbBalles = 2;
 	Balle * balles[2]={&balle_joueur1,&balle_joueur2};
-	loadGame("default", &texture_wallpaper, "a", &arrayBrique,balles, &nbBriques, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX,&textures_briques);
+
+	char theme[50],level[50],mode_jeu[50];
+	Item_menu menu[6];
+	genereMenu(menu,ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
+
+	loadGame("mario", &texture_wallpaper, "classique", &arrayBrique,balles, &nbBriques, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX,&textures_briques);
 	initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
 
-  	int loop=1;
-  	int partie_stopped=1;
+
+	/********* MENU ********/
+  	int loop=1,indice_fleches_verticales=0,indice_fleches_horizontales=0;
+  	while(loop){
+		glClear(GL_COLOR_BUFFER_BIT);
+		drawItem(&(menu[WALLPAPER]),ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
+
+		drawItem(&(menu[START_GAME]),ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
+		drawItem(&(menu[MODE_JEU]),ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
+		drawItem(&(menu[THEME]),ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
+		drawItem(&(menu[LEVEL]),ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
+		drawItem(&(menu[QUIT]),ABCISSE_REPERE_MAX,ORDONNE_REPERE_MAX);
+		SDL_GL_SwapBuffers();
+
+		SDL_Event e;
+	    while(SDL_PollEvent(&e)) {
+	    	if(e.type == SDL_QUIT) {
+	    		loop = 0;
+	        	break;
+	      	}
+	      
+	      	switch(e.type) {
+	        	case SDL_MOUSEBUTTONUP:
+	          
+	        	break;
+
+	          	case SDL_VIDEORESIZE:
+		        	WINDOW_WIDTH = e.resize.w;
+		          	WINDOW_HEIGHT = e.resize.h;
+		          	setVideoMode();
+		        break;
+
+	        	case SDL_KEYDOWN:
+	      	  		switch(e.key.keysym.sym){
+
+	            		case SDLK_UP:
+	            			indice_fleches_verticales--;
+	            			handleMenu(&indice_fleches_verticales,menu,5); // on ne compte pas le dernier(wallpaper)
+
+	            		break;
+
+	            		case SDLK_DOWN:
+	            			indice_fleches_verticales++;
+	            			handleMenu(&indice_fleches_verticales,menu,5); // on ne compte pas le dernier(wallpaper)
+
+	           			break;
+
+	           			case SDLK_RIGHT:
+	           				indice_fleches_horizontales++;
+	           				handleItem(&indice_fleches_horizontales,indice_fleches_verticales,&(menu[indice_fleches_verticales]),menu);
+	           			break;
+
+	           			case SDLK_LEFT:
+	           				indice_fleches_horizontales--;
+	           				handleItem(&indice_fleches_horizontales,indice_fleches_verticales,&(menu[indice_fleches_verticales]),menu);
+	           			break;
+	      	    		
+	      	    		case SDLK_RETURN :
+	      	    			if(indice_fleches_verticales == START_GAME){
+	      	    				strcpy(theme,menu[THEME].values[menu[THEME].indice_courant]);
+	      	    				strcpy(level,menu[LEVEL].values[menu[LEVEL].indice_courant]);
+	      	    				strcpy(mode_jeu,menu[MODE_JEU].values[menu[MODE_JEU].indice_courant]);
+	      	    				loop=0;
+	      	    			}
+	      	    		break;
+	      	    		default : break;
+	      	  	}
+
+	          	break;
+
+	         	case SDL_KEYUP:
+	          		switch(e.key.keysym.sym){
+	          			case SDLK_UP:
+	            		break;
+
+			            case SDLK_DOWN:
+
+			            break;
+
+	            		default:break;
+	         	} 
+	        	default:break;
+
+	      	}
+    	}
+	}
+
+	printf("theme %s\n",theme );
+	printf("level %s\n",level );
+	printf("mode_jeu %s\n",mode_jeu );
+
+	/********* JEU ********/
+	loop=1;
+	int partie_stopped=1;
   	while(loop) {
     	Uint32 startTime = SDL_GetTicks();
 
@@ -130,7 +226,7 @@ int main(int argc, char * argv []){
 
 
 		    /*****  IA  ******/
-		   	handleBarreIAJ2( &balle_joueur1, &balle_joueur2, &j1, &j2, ORDONNE_REPERE_MAX);
+		   	//handleBarreIAJ2( &balle_joueur1, &balle_joueur2, &j1, &j2, ORDONNE_REPERE_MAX);
 		   
 
 		    /****** GESTION PERTE ******/

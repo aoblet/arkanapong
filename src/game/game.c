@@ -67,8 +67,8 @@ void loadGame(	char * theme, GLuint * texture_wallpaper, char * nomlevel, Brique
 	
 	GLuint texture_load;
 	loadTexture(&texture_load,"../img/utils/loading.jpg");
-	dessinWallpaper(texture_load,abcisseRepereMax,ordonneRepereMax);
-	SDL_GL_SwapBuffers(); 
+	//dessinWallpaper(texture_load,abcisseRepereMax,ordonneRepereMax);
+	//SDL_GL_SwapBuffers(); 
 
 	/***** CHARGEMENT LEVEL *******/
 	FILE * file = NULL;
@@ -95,7 +95,7 @@ void loadGame(	char * theme, GLuint * texture_wallpaper, char * nomlevel, Brique
 
 	char chemin_wallpaper [50] = "../img/themes/";
 	strcat(chemin_wallpaper,theme);
-	strcat(chemin_wallpaper,"/screen/wallpaper.jpg");
+	strcat(chemin_wallpaper,"/screen/wallpaper.png");
 
 	loadTexture(texture_wallpaper,chemin_wallpaper);
 	loadTexturesBriques(textures_briques,theme);

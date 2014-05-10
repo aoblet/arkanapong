@@ -8,5 +8,6 @@ Item_menu createItem(float xPos, float yPos, float xSize, float ySize,int nb_ele
 	item.ySize = ySize;
 	item.nb_elements = nb_elements;
 	item.indice_courant = 0;
+	item.on_off = 0;
 	return item;
 }

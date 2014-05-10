@@ -48,7 +48,7 @@
 
 
 
-#define NB_TEXTURES_MAX 26
+#define NB_TEXTURES_MAX 30
 
 #include <GL/gl.h>
 

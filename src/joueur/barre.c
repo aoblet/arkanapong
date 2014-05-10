@@ -63,14 +63,14 @@ int handleBarreBord(Barre * barre, float abcisseRepereMax){
 
 void setBarreJ1ToScreen(Barre * barre, float ordonneRepereMax){
 	if(barre != NULL){
-		barre->yPos = -ordonneRepereMax + (barre->ySize/2 +0); // petite marge hardcoded
+		barre->yPos = -ordonneRepereMax + (barre->ySize/2 +10); // petite marge hardcoded
 		barre->xPos = 0;
 	}
 }
 
 void setBarreJ2ToScreen(Barre * barre, float ordonneRepereMax){
 	if(barre != NULL){
-		barre->yPos = ordonneRepereMax - ((barre->ySize/2) +0); // petite marge hardcoded
+		barre->yPos = ordonneRepereMax - ((barre->ySize/2) +10); // petite marge hardcoded
 		barre->xPos = 0;
 	}
 }
