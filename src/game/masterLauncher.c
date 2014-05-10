@@ -24,7 +24,7 @@ void handleItem(int * indice_item_inside, int indice_menu, Item_menu * item,Item
 	}	
 }
 
-void handleMenu(int * indice_menu, Item_menu * menu, int nb_items_menu){
+void handleMenu(int * indice_menu, int * indice_item Item_menu, * menu, int nb_items_menu){
 	if(*indice_menu < 0)
 		*indice_menu+=1;
 	else if(*indice_menu > nb_items_menu)
@@ -35,6 +35,7 @@ void handleMenu(int * indice_menu, Item_menu * menu, int nb_items_menu){
 			menu[i].on_off = 0; //desactive les items
 		}
 		menu[*indice_menu].on_off = 1; //active l'item en question
+		*indice_item = menu[*indice_menu].indice_courant;
 	}
 }
 

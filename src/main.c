@@ -117,13 +117,13 @@ int main(int argc, char * argv []){
 
 	            		case SDLK_UP:
 	            			indice_fleches_verticales--;
-	            			handleMenu(&indice_fleches_verticales,menu,5); // on ne compte pas le dernier(wallpaper)
+	            			handleMenu(&indice_fleches_verticales,&indice_fleches_horizontales,menu,5); // on ne compte pas le dernier(wallpaper)
 
 	            		break;
 
 	            		case SDLK_DOWN:
 	            			indice_fleches_verticales++;
-	            			handleMenu(&indice_fleches_verticales,menu,5); // on ne compte pas le dernier(wallpaper)
+	            			handleMenu(&indice_fleches_verticales,&indice_fleches_horizontales, menu,5); // on ne compte pas le dernier(wallpaper)
 
 	           			break;
 
