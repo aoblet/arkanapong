@@ -105,8 +105,8 @@ void loadTexturesMenu(Textures * textures){
 	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_CLASSIQUE_OFF]) , 		strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/classique/off/1.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_FULL_BONUS_ON]) , 		strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/full_bonus/on/1.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_FULL_BONUS_OFF]) , 		strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/full_bonus/off/1.png"));
-	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_ARKANA_ON]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/arkana/on/1.png"));
-	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_ARKANA_OFF]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/arkana/off/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_ARKANO_ON]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/arkana/on/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_ARKANO_OFF]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/arkana/off/1.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_NO_BONUS_ON]) , 		strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/no_bonus/on/1.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_NO_BONUS_OFF]) , 		strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/no_bonus/off/1.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_LEVEL_PONG_ON]) , 			strcat(strcpy(chemin_menu_copy,chemin_menu),"item/level/pong/on/1.png"));

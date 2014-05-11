@@ -111,9 +111,9 @@ void genereMenu(Item_menu * menu, Textures * textures_menu, float abcisse_repere
 	menu[LEVEL].textures[1][0] = textures_menu->identifiants[TEXTURE_LEVEL_FULL_BONUS_OFF];
 	strcpy(menu[LEVEL].values[1], "full_bonus");
 
-	menu[LEVEL].textures[2][1] = textures_menu->identifiants[TEXTURE_LEVEL_ARKANA_ON];
-	menu[LEVEL].textures[2][0] = textures_menu->identifiants[TEXTURE_LEVEL_ARKANA_OFF];
-	strcpy(menu[LEVEL].values[2], "arkana");
+	menu[LEVEL].textures[2][1] = textures_menu->identifiants[TEXTURE_LEVEL_ARKANO_ON];
+	menu[LEVEL].textures[2][0] = textures_menu->identifiants[TEXTURE_LEVEL_ARKANO_OFF];
+	strcpy(menu[LEVEL].values[2], "arkano");
 
 	menu[LEVEL].textures[3][1] = textures_menu->identifiants[TEXTURE_LEVEL_NO_BONUS_ON];
 	menu[LEVEL].textures[3][0] = textures_menu->identifiants[TEXTURE_LEVEL_NO_BONUS_OFF];

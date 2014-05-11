@@ -79,8 +79,8 @@ void loadGame(	char * theme, GLuint * texture_wallpaper, char * nomlevel, Brique
 	if(!strcmp(nomlevel,"classique")){
 		strcpy(chemin_level,"../level/classique.txt");
 	}
-	else if(!strcmp(nomlevel,"arkana")){
-		strcpy(chemin_level,"../level/arkana.txt");
+	else if(!strcmp(nomlevel,"arkano")){
+		strcpy(chemin_level,"../level/arkano.txt");
 	}
 	else if(!strcmp(nomlevel,"full_bonus")){
 		strcpy(chemin_level,"../level/a.txt");

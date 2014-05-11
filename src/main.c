@@ -63,16 +63,6 @@ int main(int argc, char * argv []){
 	int playmusic=1;
 
 
-
-	// load support for the OGG and MOD sample/music formats
-	int flags=MIX_INIT_OGG|MIX_INIT_MOD;
-	int initted=Mix_Init(flags);
-	if((initted&flags) != flags) {
-	    printf("Mix_Init: Failed to init required ogg and mod support!\n");
-	    printf("Mix_Init: %s\n", Mix_GetError());
-	    // handle error
-	}
-
 	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){
   	 	printf("%s", Mix_GetError());
   	}
@@ -86,7 +76,7 @@ int main(int argc, char * argv []){
 		Mix_VolumeMusic(40);
 	  	Mix_Music *musique_menu = Mix_LoadMUS("../son/Gramatik_No_Way_Out.ogg");
 	  	if(!musique_menu) {
-		    printf("Mix_LoadMUS(\"music.mp3\"): %s\n", Mix_GetError());
+		    printf("Mix_LoadMUS(\"Gramatik_No_Way_Out.ogg\"): %s\n", Mix_GetError());
 		    // this might be a critical error...
 		}
 		Mix_FadeInMusic(musique_menu,-1,2000);
@@ -198,14 +188,11 @@ int main(int argc, char * argv []){
 		      	}
 	    	}
 		}
-		printf("Loc avant destruction text menu\n");
 
 		detruireTextures(&textures_menu);
-		printf("Loc apre destruction text menu\n");
 
 
 		if(playmusic){
-			printf("playmusic on\n");
 			Mix_FadeOutMusic(1000);
 		}
 
