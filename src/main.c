@@ -245,6 +245,7 @@ int main(int argc, char * argv []){
 
 
 			loadGame(theme, &texture_wallpaper, level, &arrayBrique,balles, &nbBriques, ABCISSE_REPERE_MAX_GLOBAL, ORDONNE_REPERE_MAX_GLOBAL,&textures_briques);
+			SDL_Delay(1000); // voir le fond de loading et pas un flash
 			initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX_GAME, ORDONNE_REPERE_MAX_GAME,theme);
 	  	
 			if(TTF_Init() == -1){
