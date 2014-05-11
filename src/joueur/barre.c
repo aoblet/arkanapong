@@ -3,6 +3,7 @@
 #include <utils/dessin_utils.h>
 #include <stdlib.h>
 #include <GL/gl.h>
+#include <string.h>
 
 Barre initBarre(float xPos, float yPos, float xSize, float ySize, float xVitesse,int rouge, int vert, int bleu){
 	Barre b;
@@ -80,16 +81,23 @@ int handleBarreBord(Barre * barre, float abcisseRepereMax){
 }
 
 
-void setBarreJ1ToScreen(Barre * barre, float ordonneRepereMax){
+void setBarreJ1ToScreen(Barre * barre, float ordonneRepereMax, char * theme){
 	if(barre != NULL){
-		barre->yPos = -ordonneRepereMax + (barre->ySize/2 +10); // petite marge hardcoded
+		if(!strcmp(theme,"mario"))
+			barre->yPos = -ordonneRepereMax + (barre->ySize/2);
+		else
+			barre->yPos = -ordonneRepereMax + (barre->ySize/2 +10); // petite marge hardcoded
 		barre->xPos = 0;
+		
 	}
 }
 
-void setBarreJ2ToScreen(Barre * barre, float ordonneRepereMax){
+void setBarreJ2ToScreen(Barre * barre, float ordonneRepereMax,char * theme){
 	if(barre != NULL){
-		barre->yPos = ordonneRepereMax - ((barre->ySize/2) +10); // petite marge hardcoded
+		if(!strcmp(theme,"mario"))
+			barre->yPos = ordonneRepereMax - (barre->ySize/2);
+		else
+			barre->yPos = ordonneRepereMax - (barre->ySize/2); // petite marge hardcoded
 		barre->xPos = 0;
 	}
 }
@@ -101,7 +109,6 @@ void deplacerBarreX(Barre * barre, int direction,float abcisseRepereMax){
 		handleBarreBord(barre,abcisseRepereMax);
 	}
 }
-
 
 void stopBarre(Barre * barre){
 	barre->xVitesse = 0;

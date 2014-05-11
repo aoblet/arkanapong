@@ -10,9 +10,9 @@
 #include <math.h>
 #include <time.h>
 
-void initScreenGame(Barre * barrej1, Barre * barrej2, Balle * ballej1, Balle * ballej2, float abcisseRepereMax, float ordonneRepereMax){
-	setBarreJ1ToScreen(barrej1,ordonneRepereMax);
-  	setBarreJ2ToScreen(barrej2,ordonneRepereMax);
+void initScreenGame(Barre * barrej1, Barre * barrej2, Balle * ballej1, Balle * ballej2, float abcisseRepereMax, float ordonneRepereMax, char * theme){
+	setBarreJ1ToScreen(barrej1,ordonneRepereMax,theme);
+  	setBarreJ2ToScreen(barrej2,ordonneRepereMax,theme);
 
   	setBalleJ1ToScreen(ballej1,barrej1);
   	setBalleJ2ToScreen(ballej2,barrej2);

@@ -177,6 +177,8 @@ int main(int argc, char * argv []){
 	  	loadTexturesBarres(&textures_barres,theme);
 
 	  	float default_taille_barre_x = 80, default_taille_barre_y = 10, x_vitesse_barre_default = 5, norme_vitesse_balle_default = 3;
+	  	if(!strcmp(theme,"mario"))
+	  		default_taille_barre_y = 20;
 
 	  	Barre barre_joueur1 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,100,187,205);
 	  	barre_joueur1.texture = textures_barres.identifiants[TEXTURE_BARRE_BAS];
@@ -198,7 +200,7 @@ int main(int argc, char * argv []){
 
 
 		loadGame(theme, &texture_wallpaper, level, &arrayBrique,balles, &nbBriques, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX,&textures_briques);
-		initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
+		initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX,theme);
   	
 
 		loop = 1; 
@@ -317,15 +319,11 @@ int main(int argc, char * argv []){
 		           			break;
 		      	    		
 		      	    		case SDLK_RETURN :
-		      	    				initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
+		      	    				initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX,theme);
 									//vitesse default balles
 									initVitesseBalles(&balle_joueur1,&balle_joueur2);
 									initVitesseBarres(&barre_joueur1,&barre_joueur2);
 			      	    		if(partie_stopped){
-									initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX, ORDONNE_REPERE_MAX);
-									//vitesse default balles
-									initVitesseBalles(&balle_joueur1,&balle_joueur2);
-									initVitesseBarres(&barre_joueur1,&barre_joueur2);
 									initBonusJoueurs(&j1,&j2);
 									partie_stopped = 0;
 									printf("Vie joueur 1: %d\n", j1.vie );

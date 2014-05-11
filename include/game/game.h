@@ -8,7 +8,7 @@
 
 #include <GL/gl.h>
 
-void initScreenGame(Barre * barrej1, Barre * barrej2, Balle * ballej1, Balle * ballej2, float abcisseRepereMax, float ordonneRepereMax);
+void initScreenGame(Barre * barrej1, Barre * barrej2, Balle * ballej1, Balle * ballej2, float abcisseRepereMax, float ordonneRepereMax, char * theme);
 void stopGame(Barre * barrej1, Barre * barrej2, Balle * ballej1, Balle * ballej2);
 void initVitesseBalles(Balle * ballej1, Balle * ballej2);
 void initVitesseBarres(Barre * barrej1, Barre * barrej2);

@@ -26,7 +26,7 @@ void setVitesseBarre(Barre * barre, float xVitesse);
 void dessinBarre(Barre * barre);
 void deplacerBarreX(Barre * barre, int direction, float abcisseRepereMax); // -1 gauche, 1 droite
 int handleBarreBord(Barre * barre, float abcisseRepereMax);
-void setBarreJ1ToScreen(Barre *barre, float ordonneRepereMax);
-void setBarreJ2ToScreen(Barre *barre, float ordonneRepereMax);
+void setBarreJ1ToScreen(Barre *barre, float ordonneRepereMax, char * theme);
+void setBarreJ2ToScreen(Barre *barre, float ordonneRepereMax, char * theme);
 void stopBarre(Barre * barre);
 #endif
