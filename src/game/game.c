@@ -32,6 +32,7 @@ void initVitesseBalles(Balle * ballej1, Balle * ballej2){
 	srand(time(NULL));
 
 	setAngleVitesseBalle(ballej1,fmod(rand(),M_PI));
+	rand();
 	setAngleVitesseBalle(ballej2,-fmod(rand(),M_PI));
 }
 
@@ -128,16 +129,14 @@ void loadGame(	char * theme, GLuint * texture_wallpaper, char * nomlevel, Brique
 
 		for(i=0;i<nbBriquesXFile;i++){
 			fscanf(file,"%d",&type_brique);
-			Brique * brique = initBrique(xPos,yPos,xSize,ySize,balles);
+			if(type_brique != -1){
+				Brique * brique = initBrique(xPos,yPos,xSize,ySize,balles);
+				configureBrique(&brique,type_brique,*textures_briques);
+				grille_brique[cpt] = brique;
+			}
+			else
+				grille_brique[cpt] = NULL;
 			
-			configureBrique(&brique,type_brique,*textures_briques);
-			/*printf("Brique :\n");
-			printf("xPos : %f\n",brique->xPos);
-			printf("yPos : %f\n",brique->yPos);
-			printf("xSize : %f\n",brique->xSize);
-			printf("ySize : %f\n",brique->ySize);
-			printf("texture : %d\n\n\n",brique->texture);*/
-			grille_brique[cpt] = brique;
 			xPos += xSize;
 			cpt++;
 		}
@@ -172,15 +171,13 @@ void initBonusJoueurs(Joueur * j1,Joueur * j2){
 		detruireBonusJoueur(j2);
 }
 
-void dessinMessageWin(Joueur * joueur){
+void dessinMessageWin(char * content){
 	GLuint texture=0;
 	glGenTextures(1,&texture);
 
 	SDL_Color color = {255,255,255,0};
-	char infos[200];
-	sprintf(infos,"%s winner!",joueur->prenom);
 	TTF_Font *police_infos_game = TTF_OpenFont("../font/AppleGaramond-Light.ttf",50);
-	SDL_Surface * infos_sdl = TTF_RenderText_Blended(police_infos_game,infos,color);
+	SDL_Surface * infos_sdl = TTF_RenderText_Blended(police_infos_game,content,color);
 	float x = -infos_sdl->w/2, y = infos_sdl->h/2;
 	dessinSurfaceInfos(infos_sdl,x,y);
 	TTF_CloseFont(police_infos_game);
