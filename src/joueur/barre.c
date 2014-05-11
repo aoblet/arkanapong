@@ -97,7 +97,7 @@ void setBarreJ2ToScreen(Barre * barre, float ordonneRepereMax,char * theme){
 		if(!strcmp(theme,"mario"))
 			barre->yPos = ordonneRepereMax - (barre->ySize/2);
 		else
-			barre->yPos = ordonneRepereMax - (barre->ySize/2); // petite marge hardcoded
+			barre->yPos = ordonneRepereMax - (barre->ySize/2 +10); // petite marge hardcoded
 		barre->xPos = 0;
 	}
 }
