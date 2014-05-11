@@ -3,7 +3,7 @@
 
 CC=gcc
 CFLAGS=-Wall -g
-LDFLAGS= lib -lSDLmain -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf -lm
+LDFLAGS= -lSDLmain -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf -lm
 
 SRC_PATH=../src
 OBJ_PATH=../obj

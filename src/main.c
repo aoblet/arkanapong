@@ -78,7 +78,7 @@ int main(int argc, char * argv []){
 
 	
 		Mix_VolumeMusic(20);
-	  	Mix_Music *musique_menu = Mix_LoadMUS("../son/Gramatik_No_Way_Out.ogg");
+	  	Mix_Music *musique_menu = Mix_LoadMUS("../son/menu.ogg");
 	  	if(!musique_menu) {
 		    printf("Mix_LoadMUS(\"Gramatik_No_Way_Out.ogg\"): %s\n", Mix_GetError());
 		    // this might be a critical error...
@@ -203,7 +203,15 @@ int main(int argc, char * argv []){
 		Mix_FreeMusic(musique_menu);
 		if(!exit_arkana){
 
-			Mix_Music *musique_game = Mix_LoadMUS("../son/Gramatik_Break_loose.ogg");
+			Mix_Music *musique_game = NULL;
+
+			if(!strcmp(theme,"mario"))
+				musique_game = Mix_LoadMUS("../son/mario.ogg");
+			else if(!strcmp(theme,"espace"))
+				musique_game = Mix_LoadMUS("../son/espace.ogg");
+			else
+				musique_game = Mix_LoadMUS("../son/flat.ogg");
+
 			if(!musique_game) {
 			    printf("Mix_LoadMUS(\"game.ogg\"): %s\n", Mix_GetError());
 			    // this might be a critical error...
@@ -283,9 +291,9 @@ int main(int argc, char * argv []){
 
 			    if(end){
 					if(j1.vie == 0)
-						dessinMessageWin("Joueur 2 vainqueur !");
+						dessinMessageWin("Joueur 2 vainqueur !",&j2);
 					else
-						dessinMessageWin("Joueur 1 vainqueur !");
+						dessinMessageWin("Joueur 1 vainqueur !",&j1);
 				}
 			    SDL_GL_SwapBuffers(); 
 			    /* fin dessin */

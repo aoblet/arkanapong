@@ -181,16 +181,29 @@ void iniBonusBalles(Balle * balle_j1, Balle * balle_j2){
 		initBonusBalle(balle_j2);
 }
 
-void dessinMessageWin(char * content){
+void dessinMessageWin(char * content, Joueur * joueur){
 	GLuint texture=0;
 	glGenTextures(1,&texture);
 
 	SDL_Color color = {255,255,255,0};
-	TTF_Font *police_infos_game = TTF_OpenFont("../font/Harabara.ttf",40);
+	TTF_Font *police_infos_game = TTF_OpenFont("../font/Harabara.ttf",20);
 	SDL_Surface * infos_sdl = TTF_RenderText_Blended(police_infos_game,content,color);
 	float x = -infos_sdl->w/2, y = infos_sdl->h/2;
 	dessinSurfaceInfos(infos_sdl,x,y);
+
+	char infos[50];
+	sprintf(infos,"Briques hit: %d",joueur->nb_coups_briques);
+	SDL_Surface * infos_briques = TTF_RenderText_Blended(police_infos_game,infos,color);
+	dessinSurfaceInfos(infos_briques,x,y-infos_sdl->h);
+
+	char infos_barre[50];
+	sprintf(infos_barre,"Barre hit: %d",joueur->nb_coups_barre);
+	SDL_Surface * infos_barre_sdl = TTF_RenderText_Blended(police_infos_game,infos_barre,color);
+	dessinSurfaceInfos(infos_barre_sdl,x,y-infos_sdl->h-infos_briques->h);
+
 	TTF_CloseFont(police_infos_game);
 
+	SDL_FreeSurface(infos_briques);
+	SDL_FreeSurface(infos_barre_sdl);
 	SDL_FreeSurface(infos_sdl);
 }
