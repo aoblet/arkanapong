@@ -254,7 +254,7 @@ int main(int argc, char * argv []){
 			}
 
 			TTF_Font *police_infos_joueur = NULL;
-			police_infos_joueur= TTF_OpenFont("../font/OptimusPrinceps.ttf",25);
+			police_infos_joueur= TTF_OpenFont("../font/DS-DIGI.ttf",20);
 
 		
 			loop = 1; 
