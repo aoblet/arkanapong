@@ -62,7 +62,11 @@ int main(int argc, char * argv []){
 	int exit_arkana=0;
 	int playmusic=1;
 
-
+	if(Mix_Init(MIX_INIT_MP3) != MIX_INIT_MP3)
+  	 	printf("%s", Mix_GetError());
+  	 else
+  	 	printf("INIT MP3 ok\n");
+  
 	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){
   	 	printf("%s", Mix_GetError());
   	}
