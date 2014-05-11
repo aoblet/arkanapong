@@ -186,3 +186,10 @@ void updateBonusBalle(Balle * balle, float norme_vitesse_default){
 		}
 	}
 }
+
+void initBonusBalle(Balle * balle){
+	if(balle != NULL){
+		free(balle->bonus);
+		balle->bonus = NULL;
+	}
+}

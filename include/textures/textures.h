@@ -45,7 +45,7 @@
 #define TEXTURE_WALLPAPER_MARIO			24
 #define TEXTURE_WALLPAPER_ESPACE		25
 #define TEXTURE_WALLPAPER_FLAT			26
-#define NB_TEXTURES_MENU				26
+#define NB_TEXTURES_MENU				27
 
 
 //barre (&& coeur : eviter de recréer un tableau que pour une seule texture)
@@ -55,7 +55,7 @@
 #define NB_TEXTURES_BARRES_COEUR 3
 
 
-#define NB_TEXTURES_MAX 26
+#define NB_TEXTURES_MAX 27
 
 #include <GL/gl.h>
 #include <SDL/SDL.h>

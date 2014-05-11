@@ -23,4 +23,5 @@ void loadGame(	char * theme, GLuint * texture_wallpaper, char * nomlevel, Brique
 void dessinBriques(Brique ** briques_array, int nbBriques);
 void handleGrilleBrique(Brique ** briques_array, int nbBriques, int nbBalles, Textures textures_briques);
 void dessinMessageWin(char * content);
+void iniBonusBalles(Balle * balle_j1, Balle * balle_j2);
 #endif

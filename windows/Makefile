@@ -3,7 +3,7 @@
 
 CC=gcc
 CFLAGS=-Wall -g
-LDFLAGS=-lmingw32 -lSDLmain -lSDL -lSDL_mixer -lSDL_ttf  -lGLU32 -lSDL_image -lopengl32  -lm 
+LDFLAGS=-lmingw32 -lSDLmain -lSDL -lSDL_mixer -lSDL_ttf -lGLU32 -lSDL_image -lopengl32  -lm 
 
 SRC_PATH=../src
 OBJ_PATH=../obj

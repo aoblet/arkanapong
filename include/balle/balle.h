@@ -43,4 +43,5 @@ void setBalleJ1ToScreen(Balle * balle, Barre * barre);
 void setBalleJ2ToScreen(Balle * balle, Barre * barre);
 void addBonusBalle(Balle * balle, int compteur_frame, int nom_bonus, float value);
 void updateBonusBalle(Balle * Balle, float norme_vitesse_default);
+void initBonusBalle(Balle * balle);
 #endif

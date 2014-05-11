@@ -46,12 +46,7 @@ void setVideoMode(SDL_Surface ** ecran) {
 }
 
 
-int main(int argc, char * argv []){
-	freopen("CON", "w", stdout);
-  	freopen("CON", "r", stdin);
-  	freopen("CON", "w", stderr);
-
-  	
+int main(int argc, char * argv []){  	
 	SDL_putenv ("SDL_VIDEO_CENTERED=center");
 
 	if(SDL_Init(SDL_INIT_VIDEO)==-1) {
@@ -70,15 +65,18 @@ int main(int argc, char * argv []){
   	 	printf("%s", Mix_GetError());
   	}
 	do{
-	  	char theme[50],level[50],mode_jeu[50];
+	  	char theme[100],level[100],mode_jeu[100];
 		Item_menu menu[6];
 		Textures textures_menu;
 		genereMenu(menu,&textures_menu,ABCISSE_REPERE_MAX_GLOBAL,ORDONNE_REPERE_MAX_GLOBAL);
 
 	
-
 		Mix_VolumeMusic(40);
 	  	Mix_Music *musique_menu = Mix_LoadMUS("../son/Gramatik_No_Way_Out.ogg");
+	  	if(!musique_menu) {
+		    printf("Mix_LoadMUS(\"music.mp3\"): %s\n", Mix_GetError());
+		    // this might be a critical error...
+		}
 		Mix_FadeInMusic(musique_menu,-1,2000);
 		playmusic=1;
 
@@ -188,8 +186,11 @@ int main(int argc, char * argv []){
 		      	}
 	    	}
 		}
+		printf("Loc avant destruction text menu\n");
 
 		detruireTextures(&textures_menu);
+		printf("Loc apre destruction text menu\n");
+
 
 		if(playmusic){
 			printf("playmusic on\n");
@@ -200,6 +201,10 @@ int main(int argc, char * argv []){
 		if(!exit_arkana){
 
 			Mix_Music *musique_game = Mix_LoadMUS("../son/Gramatik_Break_loose.ogg");
+			if(!musique_game) {
+			    printf("Mix_LoadMUS(\"game.mp3\"): %s\n", Mix_GetError());
+			    // this might be a critical error...
+			}
 
 		  	Mix_VolumeMusic(50);
 		  	Mix_FadeInMusic(musique_game,-1,4000);
@@ -220,7 +225,7 @@ int main(int argc, char * argv []){
 		  	Barre barre_joueur1 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,100,187,205);
 		  	barre_joueur1.texture = textures_barres_coeur.identifiants[TEXTURE_BARRE_BAS];
 		  	Joueur j1 = initJoueur("Alexis","Alex",10,&barre_joueur1);
-		  	Balle balle_joueur1 = initBalle(0,-ORDONNE_REPERE_MAX_GAME+30,0,0,5,151,187,205,&j1);
+		  	Balle balle_joueur1 = initBalle(0,-ORDONNE_REPERE_MAX_GAME+30,0,0,5,200,187,205,&j1);
 
 		  	Barre barre_joueur2 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,255,204,0);
 		  	barre_joueur2.texture = textures_barres_coeur.identifiants[TEXTURE_BARRE_HAUT];
@@ -264,7 +269,7 @@ int main(int argc, char * argv []){
 			    glColor3ub(255,255,255); // init
 			    dessinWallpaper(texture_wallpaper,ABCISSE_REPERE_MAX_GAME,ORDONNE_REPERE_MAX_GAME);
 			    dessinInfosJoueur(2,&j2,police_infos_joueur,&textures_barres_coeur,0,204,255,-ABCISSE_REPERE_MAX_GLOBAL,ORDONNE_REPERE_MAX_GLOBAL,-1);
-			    dessinInfosJoueur(1,&j1,police_infos_joueur,&textures_barres_coeur,205,187,151,ABCISSE_REPERE_MAX_GLOBAL,-ORDONNE_REPERE_MAX_GLOBAL,1);
+			    dessinInfosJoueur(1,&j1,police_infos_joueur,&textures_barres_coeur,205,187,200,ABCISSE_REPERE_MAX_GLOBAL,-ORDONNE_REPERE_MAX_GLOBAL,1);
 
 			    dessinBalle(&balle_joueur1,ABCISSE_REPERE_MAX_GAME,ORDONNE_REPERE_MAX_GAME);
 			   	dessinBalle(&balle_joueur2,ABCISSE_REPERE_MAX_GAME,ORDONNE_REPERE_MAX_GAME);
@@ -394,10 +399,8 @@ int main(int argc, char * argv []){
 										initVitesseBarres(&barre_joueur1,&barre_joueur2);
 					      	    		if(partie_stopped){
 											initBonusJoueurs(&j1,&j2);
+											iniBonusBalles(&balle_joueur1,&balle_joueur2);
 											partie_stopped = 0;
-											printf("Vie joueur 1: %d\n", j1.vie );
-											printf("Vie joueur 2: %d\n", j2.vie );
-											printf("\n" );
 					      	    		}
 			      	    			}
 			      	    			else{
