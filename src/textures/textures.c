@@ -8,8 +8,8 @@
 
 void loadTexture(GLuint * id, char * chemin_texture){
 	
-	    glGenTextures(1,id);
-	    SDL_Surface * img = IMG_Load(chemin_texture);
+	glGenTextures(1,id);
+	SDL_Surface * img = IMG_Load(chemin_texture);
 
 	if(img != NULL){
 	    GLenum format;
@@ -33,8 +33,8 @@ void loadTexture(GLuint * id, char * chemin_texture){
 
 	    if(id!= 0){
 			glBindTexture(GL_TEXTURE_2D,*id);
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
 			// GL_UNSIGNED_BYTE -> composante de couleur géré sur SDL
 			glTexImage2D( GL_TEXTURE_2D,0, GL_RGBA, img->w, img->h, 0, format, GL_UNSIGNED_BYTE, img->pixels);
@@ -123,7 +123,7 @@ void loadTexturesMenu(Textures * textures){
 
 void loadTexturesBarres(Textures * textures, char * theme){
 	textures->nb_textures = NB_TEXTURES_BARRES;
-	
+
 	char theme_string_safe[50];
 	strcpy(theme_string_safe,theme);
 	char chemin_barres[50], chemin_barres_copy[5000];
@@ -139,4 +139,35 @@ void loadTexturesBarres(Textures * textures, char * theme){
 
 void detruireTextures(Textures * textures){
 	glDeleteTextures(textures->nb_textures,textures->identifiants);
+}
+
+void dessinSurfaceInfos(SDL_Surface * surface, float xPos,float yPos){
+	GLuint texture=0;
+	glEnable(GL_TEXTURE_2D );
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glGenTextures(1,&texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surface->w, surface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surface->pixels);
+	glColor3ub(255,255,255);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0,1);
+		glVertex2f(xPos,yPos-surface->h);
+
+		glTexCoord2f(1,1);
+		glVertex2f(xPos+surface->w,yPos-surface->h);
+
+		glTexCoord2f(1,0);
+		glVertex2f(xPos+surface->w,yPos);
+
+		glTexCoord2f(0,0);
+		glVertex2f(xPos,yPos);
+	glEnd();
+	glDeleteTextures(1,&texture);
+	glDisable(GL_BLEND);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
 }

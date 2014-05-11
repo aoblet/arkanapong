@@ -4,6 +4,7 @@
 #include <GL/gl.h>
 #include <SDL/SDL_image.h>
 #include <SDL/SDL.h>
+#include <SDL/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -116,7 +117,7 @@ void loadGame(	char * theme, GLuint * texture_wallpaper, char * nomlevel, Brique
 			xPos=-abcisseRepereMax+(xSize/2),
 			yPos=ySize*nbBriquesYFile/2;
 
-	printf("ysize %f, xSize : %f, xPos: %f, yPos, %f\n",ySize,xSize,xPos,yPos );
+	//printf("ysize %f, xSize : %f, xPos: %f, yPos, %f\n",ySize,xSize,xPos,yPos );
 
 	Brique ** grille_brique = (Brique **)malloc(sizeof(Brique*)*nbBriquesYFile*nbBriquesXFile);
 	
@@ -169,4 +170,20 @@ void initBonusJoueurs(Joueur * j1,Joueur * j2){
 		detruireBonusJoueur(j1);
 	if(j2 != NULL)
 		detruireBonusJoueur(j2);
+}
+
+void dessinMessageWin(Joueur * joueur){
+	GLuint texture=0;
+	glGenTextures(1,&texture);
+
+	SDL_Color color = {255,255,255,0};
+	char infos[200];
+	sprintf(infos,"%s winner!",joueur->prenom);
+	TTF_Font *police_infos_game = TTF_OpenFont("../font/AppleGaramond-Light.ttf",50);
+	SDL_Surface * infos_sdl = TTF_RenderText_Blended(police_infos_game,infos,color);
+	float x = -infos_sdl->w/2, y = -infos_sdl->h/2;
+	dessinSurfaceInfos(infos_sdl,x,y);
+	TTF_CloseFont(police_infos_game);
+
+	SDL_FreeSurface(infos_sdl);
 }

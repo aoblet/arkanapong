@@ -57,7 +57,7 @@
 #define NB_TEXTURES_MAX 26
 
 #include <GL/gl.h>
-
+#include <SDL/SDL.h>
 
 typedef struct{
 	GLuint identifiants[NB_TEXTURES_MAX];
@@ -69,5 +69,6 @@ void loadTexturesMenu(Textures * textures);
 void loadTexturesBarres(Textures * textures, char * menu);
 void loadTexture(GLuint * id, char * chemin_fichier);
 void detruireTextures(Textures * textures);
+void dessinSurfaceInfos(SDL_Surface * surface, float xPos,float yPos);
 
 #endif

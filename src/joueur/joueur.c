@@ -1,7 +1,10 @@
 #include "joueur/joueur.h"
 #include <string.h>
 #include <stdlib.h>
-
+#include <SDL/SDL.h>
+#include <SDL/SDL_ttf.h>
+#include <GL/gl.h>
+#include "textures/textures.h"
 Joueur initJoueur(char * nom, char * prenom, int vie, Barre * barre){
 	Joueur j;
 	strncpy(j.nom,nom,CAR_MAX);
@@ -100,5 +103,29 @@ void detruireBonusJoueur(Joueur * joueur){
 			free(bonus_temp);
 		}
 		joueur->bonus = NULL;
+	}
+}
+
+
+
+void dessinInfosJoueur(int nb_joueur, Joueur * joueur, TTF_Font * police_infos_joueur, int r, int v, int b, float x, float y, int extremite){
+	if(joueur != NULL){
+		GLuint texture=0;
+		glGenTextures(1,&texture);
+
+		SDL_Color color = {r,v,b,0};
+		char infos[200];
+
+		sprintf(infos,"J%d-%s | vie: %d | briques: %d | barre: %d",nb_joueur,joueur->prenom,joueur->vie,joueur->nb_coups_briques,joueur->nb_coups_barre);
+
+		SDL_Surface * infos_sdl = TTF_RenderText_Blended(police_infos_joueur,infos,color);
+
+		if(extremite==1){
+			//droit
+			x= x-infos_sdl->w;
+			y = y + infos_sdl->h;
+		}
+		dessinSurfaceInfos(infos_sdl,x,y);
+		SDL_FreeSurface(infos_sdl);
 	}
 }
