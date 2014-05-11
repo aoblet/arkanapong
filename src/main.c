@@ -62,10 +62,10 @@ int main(int argc, char * argv []){
 	int exit_arkana=0;
 	int playmusic=1;
 
-	if(Mix_Init(MIX_INIT_MP3) != MIX_INIT_MP3)
-  	 	printf("%s", Mix_GetError());
+	if(Mix_Init(MIX_INIT_OGG) != MIX_INIT_OGG)
+  	 	printf("INIT OGG FAIL : %s", Mix_GetError());
   	 else
-  	 	printf("INIT MP3 ok\n");
+  	 	printf("INIT OGG ok\n");
   
 	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){
   	 	printf("%s", Mix_GetError());
@@ -78,9 +78,9 @@ int main(int argc, char * argv []){
 
 	
 		Mix_VolumeMusic(40);
-	  	Mix_Music *musique_menu = Mix_LoadMUS("../son/Gramatik_No_Way_Out.mp3");
+	  	Mix_Music *musique_menu = Mix_LoadMUS("../son/Gramatik_No_Way_Out.ogg");
 	  	if(!musique_menu) {
-		    printf("Mix_LoadMUS(\"Gramatik_No_Way_Out.mp3\"): %s\n", Mix_GetError());
+		    printf("Mix_LoadMUS(\"Gramatik_No_Way_Out.ogg\"): %s\n", Mix_GetError());
 		    // this might be a critical error...
 		}
 		Mix_FadeInMusic(musique_menu,-1,2000);
@@ -203,9 +203,9 @@ int main(int argc, char * argv []){
 		Mix_FreeMusic(musique_menu);
 		if(!exit_arkana){
 
-			Mix_Music *musique_game = Mix_LoadMUS("../son/Gramatik_Break_loose.mp3");
+			Mix_Music *musique_game = Mix_LoadMUS("../son/Gramatik_Break_loose.ogg");
 			if(!musique_game) {
-			    printf("Mix_LoadMUS(\"game.mp3\"): %s\n", Mix_GetError());
+			    printf("Mix_LoadMUS(\"game.ogg\"): %s\n", Mix_GetError());
 			    // this might be a critical error...
 			}
 

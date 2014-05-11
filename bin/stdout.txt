@@ -1,1 +1,1 @@
-INIT MP3 ok
+INIT OGG ok
