@@ -77,7 +77,7 @@ int main(int argc, char * argv []){
 		genereMenu(menu,&textures_menu,ABCISSE_REPERE_MAX_GLOBAL,ORDONNE_REPERE_MAX_GLOBAL);
 
 	
-		Mix_VolumeMusic(40);
+		Mix_VolumeMusic(20);
 	  	Mix_Music *musique_menu = Mix_LoadMUS("../son/Gramatik_No_Way_Out.ogg");
 	  	if(!musique_menu) {
 		    printf("Mix_LoadMUS(\"Gramatik_No_Way_Out.ogg\"): %s\n", Mix_GetError());
@@ -244,7 +244,7 @@ int main(int argc, char * argv []){
 			Balle * balles[2]={&balle_joueur1,&balle_joueur2};
 
 
-			loadGame(theme, &texture_wallpaper, level, &arrayBrique,balles, &nbBriques, ABCISSE_REPERE_MAX_GAME, ORDONNE_REPERE_MAX_GAME,&textures_briques);
+			loadGame(theme, &texture_wallpaper, level, &arrayBrique,balles, &nbBriques, ABCISSE_REPERE_MAX_GLOBAL, ORDONNE_REPERE_MAX_GLOBAL,&textures_briques);
 			initScreenGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2, ABCISSE_REPERE_MAX_GAME, ORDONNE_REPERE_MAX_GAME,theme);
 	  	
 			if(TTF_Init() == -1){

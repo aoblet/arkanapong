@@ -67,10 +67,10 @@ void dessinWallpaper(GLuint textureWallpaper, float abcisseRepereMax, float ordo
 void loadGame(	char * theme, GLuint * texture_wallpaper, char * nomlevel, Brique *** arrayBrique, Balle ** balles, 
 				int * nbBriques, float abcisseRepereMax, float ordonneRepereMax,Textures * textures_briques){
 	
-	/*GLuint texture_load;
+	GLuint texture_load;
 	loadTexture(&texture_load,"../img/utils/loading.jpg");
 	dessinWallpaper(texture_load,abcisseRepereMax,ordonneRepereMax);
-	SDL_GL_SwapBuffers(); */
+	SDL_GL_SwapBuffers(); 
 
 	/***** CHARGEMENT LEVEL *******/
 	FILE * file = NULL;
@@ -145,7 +145,7 @@ void loadGame(	char * theme, GLuint * texture_wallpaper, char * nomlevel, Brique
 
 	*arrayBrique = grille_brique;
 	fclose(file);
-	//glDeleteTextures(1,&texture_load);
+	glDeleteTextures(1,&texture_load);
 }
 
 void dessinBriques(Brique ** briques_array, int nbBriques){
