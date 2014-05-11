@@ -56,7 +56,7 @@ int main(int argc, char * argv []){
 
 	SDL_Surface * ecran = NULL;
  	setVideoMode(&ecran);
-  	SDL_WM_SetCaption("Arkana-Pong", NULL);
+  	SDL_WM_SetCaption("Arkano-Pong", NULL);
 
 	int game = 1;
 	int exit_arkana=0;
@@ -74,9 +74,9 @@ int main(int argc, char * argv []){
 
 	
 		Mix_VolumeMusic(40);
-	  	Mix_Music *musique_menu = Mix_LoadMUS("../son/Gramatik_No_Way_Out.ogg");
+	  	Mix_Music *musique_menu = Mix_LoadMUS("../son/Gramatik_No_Way_Out.mp3");
 	  	if(!musique_menu) {
-		    printf("Mix_LoadMUS(\"Gramatik_No_Way_Out.ogg\"): %s\n", Mix_GetError());
+		    printf("Mix_LoadMUS(\"Gramatik_No_Way_Out.mp3\"): %s\n", Mix_GetError());
 		    // this might be a critical error...
 		}
 		Mix_FadeInMusic(musique_menu,-1,2000);
@@ -199,7 +199,7 @@ int main(int argc, char * argv []){
 		Mix_FreeMusic(musique_menu);
 		if(!exit_arkana){
 
-			Mix_Music *musique_game = Mix_LoadMUS("../son/Gramatik_Break_loose.ogg");
+			Mix_Music *musique_game = Mix_LoadMUS("../son/Gramatik_Break_loose.mp3");
 			if(!musique_game) {
 			    printf("Mix_LoadMUS(\"game.mp3\"): %s\n", Mix_GetError());
 			    // this might be a critical error...

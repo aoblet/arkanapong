@@ -1,4 +1,4 @@
-# Makefile pour arkanapong
+# Makefile pour arkanopong
 # @author Oblet Alexis, Biteau Armand
 
 CC=gcc
@@ -14,7 +14,7 @@ SRC_FILES = $(shell find_mingw $(SRC_PATH) -type f -name '*.c')
 
 OBJ_FILES = $(patsubst $(SRC_PATH)/%.c,$(OBJ_PATH)/%.o, $(SRC_FILES))
 
-EXEC=arkanapong
+EXEC=arkanopong
 
 all: $(EXEC)
 	@echo 'All compiled'
