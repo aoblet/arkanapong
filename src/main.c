@@ -245,9 +245,9 @@ int main(int argc, char * argv []){
 
 		    if(end){
 				if(j1.vie == 0)
-					dessinMessageWin(&j1);
-				else
 					dessinMessageWin(&j2);
+				else
+					dessinMessageWin(&j1);
 			}
 		    SDL_GL_SwapBuffers(); 
 		    /* fin dessin */

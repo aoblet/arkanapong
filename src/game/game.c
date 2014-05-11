@@ -79,7 +79,7 @@ void loadGame(	char * theme, GLuint * texture_wallpaper, char * nomlevel, Brique
 		strcpy(chemin_level,"../level/classique.txt");
 	}
 	else if(!strcmp(nomlevel,"arkana")){
-		strcpy(chemin_level,"../level/a.txt");
+		strcpy(chemin_level,"../level/arkana.txt");
 	}
 	else if(!strcmp(nomlevel,"full_bonus")){
 		strcpy(chemin_level,"../level/a.txt");
@@ -115,7 +115,7 @@ void loadGame(	char * theme, GLuint * texture_wallpaper, char * nomlevel, Brique
 	float 	ySize = 20, 
 			xSize = abcisseRepereMax*2/(float)nbBriquesXFile, 
 			xPos=-abcisseRepereMax+(xSize/2),
-			yPos=ySize*nbBriquesYFile/2;
+			yPos=ySize*nbBriquesYFile/2 - ySize/2;
 
 	//printf("ysize %f, xSize : %f, xPos: %f, yPos, %f\n",ySize,xSize,xPos,yPos );
 
@@ -181,7 +181,7 @@ void dessinMessageWin(Joueur * joueur){
 	sprintf(infos,"%s winner!",joueur->prenom);
 	TTF_Font *police_infos_game = TTF_OpenFont("../font/AppleGaramond-Light.ttf",50);
 	SDL_Surface * infos_sdl = TTF_RenderText_Blended(police_infos_game,infos,color);
-	float x = -infos_sdl->w/2, y = -infos_sdl->h/2;
+	float x = -infos_sdl->w/2, y = infos_sdl->h/2;
 	dessinSurfaceInfos(infos_sdl,x,y);
 	TTF_CloseFont(police_infos_game);
 
