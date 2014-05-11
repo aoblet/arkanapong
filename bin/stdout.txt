@@ -1,15 +1,3 @@
 Loc avant destruction text menu
 Loc apre destruction text menu
 playmusic on
-Loc avant destruction text menu
-Loc apre destruction text menu
-playmusic on
-Loc avant destruction text menu
-Loc apre destruction text menu
-playmusic on
-Loc avant destruction text menu
-Loc apre destruction text menu
-playmusic on
-Loc avant destruction text menu
-Loc apre destruction text menu
-playmusic on

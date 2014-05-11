@@ -61,6 +61,18 @@ int main(int argc, char * argv []){
 	int game = 1;
 	int exit_arkana=0;
 	int playmusic=1;
+
+	 	
+
+	// load support for the OGG and MOD sample/music formats
+	int flags=MIX_INIT_OGG|MIX_INIT_MOD;
+	int initted=Mix_Init(flags);
+	if(initted&flags != flags) {
+	    printf("Mix_Init: Failed to init required ogg and mod support!\n");
+	    printf("Mix_Init: %s\n", Mix_GetError());
+	    // handle error
+	}
+
 	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){
   	 	printf("%s", Mix_GetError());
   	}
