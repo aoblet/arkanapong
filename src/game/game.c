@@ -83,10 +83,13 @@ void loadGame(	char * theme, GLuint * texture_wallpaper, char * nomlevel, Brique
 		strcpy(chemin_level,"../level/arkano.txt");
 	}
 	else if(!strcmp(nomlevel,"full_bonus")){
-		strcpy(chemin_level,"../level/a.txt");
+		strcpy(chemin_level,"../level/full_bonus.txt");
 	}
 	else if(!strcmp(nomlevel,"no_bonus")){
-		strcpy(chemin_level,"../level/a.txt");
+		strcpy(chemin_level,"../level/no_bonus.txt");
+	}
+	else if(!strcmp(nomlevel,"pong")){
+		strcpy(chemin_level,"../level/pong.txt");
 	}
 	else{
 		fprintf(stderr, "niveau inconnu");
