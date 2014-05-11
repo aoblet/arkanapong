@@ -49,7 +49,7 @@ void setVideoMode(SDL_Surface ** ecran) {
 int main(int argc, char * argv []){  	
 	SDL_putenv ("SDL_VIDEO_CENTERED=center");
 
-	if(SDL_Init(SDL_INIT_VIDEO)==-1) {
+	if(SDL_Init(SDL_INIT_VIDEO |SDL_INIT_AUDIO)==-1) {
 		fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
 		return EXIT_FAILURE;
 	}
@@ -62,12 +62,12 @@ int main(int argc, char * argv []){
 	int exit_arkana=0;
 	int playmusic=1;
 
-	 	
+
 
 	// load support for the OGG and MOD sample/music formats
 	int flags=MIX_INIT_OGG|MIX_INIT_MOD;
 	int initted=Mix_Init(flags);
-	if(initted&flags != flags) {
+	if((initted&flags) != flags) {
 	    printf("Mix_Init: Failed to init required ogg and mod support!\n");
 	    printf("Mix_Init: %s\n", Mix_GetError());
 	    // handle error
