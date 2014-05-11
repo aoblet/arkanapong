@@ -78,7 +78,7 @@ int main(int argc, char * argv []){
 	
 
 		Mix_VolumeMusic(40);
-	  	Mix_Music *musique_menu = Mix_LoadMUS("../son/Gramatik_No_Way_Out.mp3");
+	  	Mix_Music *musique_menu = Mix_LoadMUS("../son/Gramatik_No_Way_Out.ogg");
 		Mix_FadeInMusic(musique_menu,-1,2000);
 		playmusic=1;
 
@@ -199,7 +199,7 @@ int main(int argc, char * argv []){
 		Mix_FreeMusic(musique_menu);
 		if(!exit_arkana){
 
-			Mix_Music *musique_game = Mix_LoadMUS("../son/Gramatik_Break_loose.mp3");
+			Mix_Music *musique_game = Mix_LoadMUS("../son/Gramatik_Break_loose.ogg");
 
 		  	Mix_VolumeMusic(50);
 		  	Mix_FadeInMusic(musique_game,-1,4000);
@@ -219,12 +219,12 @@ int main(int argc, char * argv []){
 
 		  	Barre barre_joueur1 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,100,187,205);
 		  	barre_joueur1.texture = textures_barres_coeur.identifiants[TEXTURE_BARRE_BAS];
-		  	Joueur j1 = initJoueur("Alexis","Alex",1,&barre_joueur1);
+		  	Joueur j1 = initJoueur("Alexis","Alex",10,&barre_joueur1);
 		  	Balle balle_joueur1 = initBalle(0,-ORDONNE_REPERE_MAX_GAME+30,0,0,5,151,187,205,&j1);
 
 		  	Barre barre_joueur2 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,255,204,0);
 		  	barre_joueur2.texture = textures_barres_coeur.identifiants[TEXTURE_BARRE_HAUT];
-		  	Joueur j2 = initJoueur("Machine","Armand",1,&barre_joueur2);
+		  	Joueur j2 = initJoueur("Machine","Armand",10,&barre_joueur2);
 		  	Balle balle_joueur2 = initBalle(0,ORDONNE_REPERE_MAX_GAME-30,0,0,5,255,204,0,&j2);
 
 
