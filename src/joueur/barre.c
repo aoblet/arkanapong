@@ -41,6 +41,7 @@ void setVitesseBarre(Barre * barre, float xVitesse){
 void dessinBarre(Barre * barre){
 
 	if(barre != NULL){
+		glColor3ub(255,255,255);
 		dessinTexture(barre->texture,barre->xPos, barre->yPos,barre->xSize, barre->ySize);
 	}
 }

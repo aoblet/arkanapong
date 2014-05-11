@@ -175,8 +175,8 @@ void dessinMessageWin(char * content){
 	GLuint texture=0;
 	glGenTextures(1,&texture);
 
-	SDL_Color color = {50,255,50,0};
-	TTF_Font *police_infos_game = TTF_OpenFont("../font/AppleGaramond-Light.ttf",50);
+	SDL_Color color = {255,255,255,0};
+	TTF_Font *police_infos_game = TTF_OpenFont("../font/Harabara.ttf",50);
 	SDL_Surface * infos_sdl = TTF_RenderText_Blended(police_infos_game,content,color);
 	float x = -infos_sdl->w/2, y = infos_sdl->h/2;
 	dessinSurfaceInfos(infos_sdl,x,y);

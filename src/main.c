@@ -18,7 +18,7 @@ static unsigned int WINDOW_WIDTH = 800;
 static unsigned int WINDOW_HEIGHT = 800;
 
 static float ABCISSE_REPERE_MAX_GAME = 200;
-static float ORDONNE_REPERE_MAX_GAME = 180;
+static float ORDONNE_REPERE_MAX_GAME = 175;
 
 static float ABCISSE_REPERE_MAX_GLOBAL = 200;
 static float ORDONNE_REPERE_MAX_GLOBAL = 200;
@@ -65,23 +65,26 @@ int main(int argc, char * argv []){
 
 	int game = 1;
 	int exit_arkana=0;
+	int playmusic=1;
+	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){
+  	 	printf("%s", Mix_GetError());
+  	}
 	do{
 	  	char theme[50],level[50],mode_jeu[50];
 		Item_menu menu[6];
 		Textures textures_menu;
 		genereMenu(menu,&textures_menu,ABCISSE_REPERE_MAX_GLOBAL,ORDONNE_REPERE_MAX_GLOBAL);
 
-		if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){
-	  	 	printf("%s", Mix_GetError());
-	  	}
+	
 
 		Mix_VolumeMusic(40);
 	  	Mix_Music *musique_menu = Mix_LoadMUS("../son/Gramatik_No_Way_Out.mp3");
 		Mix_FadeInMusic(musique_menu,-1,2000);
+		playmusic=1;
 
 		/********* MENU ********/
 	
-	  	int loop=1,indice_fleches_verticales=0,indice_fleches_horizontales=0,playmusic=1;
+	  	int loop=1,indice_fleches_verticales=0,indice_fleches_horizontales=0;
 	  	exit_arkana=0;
 	  	while(loop){
 			glClear(GL_COLOR_BUFFER_BIT);
@@ -188,15 +191,20 @@ int main(int argc, char * argv []){
 
 		detruireTextures(&textures_menu);
 
-		Mix_FadeOutMusic(1000);
-		Mix_FreeMusic(musique_menu);
+		if(playmusic){
+			printf("playmusic on\n");
+			Mix_FadeOutMusic(1000);
+		}
 
+		Mix_FreeMusic(musique_menu);
 		if(!exit_arkana){
+
 			Mix_Music *musique_game = Mix_LoadMUS("../son/Gramatik_Break_loose.mp3");
+
 		  	Mix_VolumeMusic(50);
 		  	Mix_FadeInMusic(musique_game,-1,4000);
-
-		  	playmusic=1;
+		  	if(!playmusic)
+		  		Mix_PauseMusic();
 
 			/********* JEU ********/
 			/**********************/
@@ -211,12 +219,12 @@ int main(int argc, char * argv []){
 
 		  	Barre barre_joueur1 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,100,187,205);
 		  	barre_joueur1.texture = textures_barres_coeur.identifiants[TEXTURE_BARRE_BAS];
-		  	Joueur j1 = initJoueur("Alexis","Oblet",10,&barre_joueur1);
+		  	Joueur j1 = initJoueur("Alexis","Alex",1,&barre_joueur1);
 		  	Balle balle_joueur1 = initBalle(0,-ORDONNE_REPERE_MAX_GAME+30,0,0,5,151,187,205,&j1);
 
 		  	Barre barre_joueur2 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,255,204,0);
 		  	barre_joueur2.texture = textures_barres_coeur.identifiants[TEXTURE_BARRE_HAUT];
-		  	Joueur j2 = initJoueur("Machine","Invincible",10,&barre_joueur2);
+		  	Joueur j2 = initJoueur("Machine","Armand",1,&barre_joueur2);
 		  	Balle balle_joueur2 = initBalle(0,ORDONNE_REPERE_MAX_GAME-30,0,0,5,255,204,0,&j2);
 
 
@@ -237,7 +245,7 @@ int main(int argc, char * argv []){
 			}
 
 			TTF_Font *police_infos_joueur = NULL;
-			police_infos_joueur= TTF_OpenFont("../font/AppleGaramond-Light.ttf",20);
+			police_infos_joueur= TTF_OpenFont("../font/OptimusPrinceps.ttf",25);
 
 		
 			loop = 1; 
@@ -245,7 +253,7 @@ int main(int argc, char * argv []){
 		
 		  	while(loop){
 		    	Uint32 startTime = SDL_GetTicks();
-			    /* dessin */
+			    /* dessin */			    
 			    glClear(GL_COLOR_BUFFER_BIT);
 				
 
@@ -255,8 +263,8 @@ int main(int argc, char * argv []){
 
 			    glColor3ub(255,255,255); // init
 			    dessinWallpaper(texture_wallpaper,ABCISSE_REPERE_MAX_GAME,ORDONNE_REPERE_MAX_GAME);
-			    dessinInfosJoueur(2,&j2,police_infos_joueur,&textures_barres_coeur,230,123,80,-ABCISSE_REPERE_MAX_GLOBAL,ORDONNE_REPERE_MAX_GLOBAL,-1);
-			    dessinInfosJoueur(1,&j1,police_infos_joueur,&textures_barres_coeur,125,255,169,ABCISSE_REPERE_MAX_GLOBAL,-ORDONNE_REPERE_MAX_GLOBAL,1);
+			    dessinInfosJoueur(2,&j2,police_infos_joueur,&textures_barres_coeur,0,204,255,-ABCISSE_REPERE_MAX_GLOBAL,ORDONNE_REPERE_MAX_GLOBAL,-1);
+			    dessinInfosJoueur(1,&j1,police_infos_joueur,&textures_barres_coeur,205,187,151,ABCISSE_REPERE_MAX_GLOBAL,-ORDONNE_REPERE_MAX_GLOBAL,1);
 
 			    dessinBalle(&balle_joueur1,ABCISSE_REPERE_MAX_GAME,ORDONNE_REPERE_MAX_GAME);
 			   	dessinBalle(&balle_joueur2,ABCISSE_REPERE_MAX_GAME,ORDONNE_REPERE_MAX_GAME);

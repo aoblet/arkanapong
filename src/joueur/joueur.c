@@ -113,7 +113,7 @@ void dessinInfosJoueur(int nb_joueur, Joueur * joueur, TTF_Font * police_infos_j
 		GLuint texture=0;
 		glGenTextures(1,&texture);
 
-		SDL_Color color = {r,v,b,0};
+		SDL_Color color = {r,v,b,120};
 		char infos[200];
 		// vie: %d | briques: %d | barre: %d",nb_joueur,joueur->prenom,joueur->vie,joueur->nb_coups_briques,joueur->nb_coups_barre
 		sprintf(infos,"J%d-%s",nb_joueur, joueur->prenom);
@@ -124,13 +124,13 @@ void dessinInfosJoueur(int nb_joueur, Joueur * joueur, TTF_Font * police_infos_j
 			//droit
 			x= x-infos_sdl->w-50;
 			y = y + infos_sdl->h;
-			y_coeur = y-infos_sdl->h/2;
+			y_coeur = y-infos_sdl->h/2-2;
 		}
 		dessinSurfaceInfos(infos_sdl,x,y);
 
-		dessinTexture(barres_coeur->identifiants[TEXTURE_COEUR],x+infos_sdl->w + 15, y_coeur,20,20);
+		dessinTexture(barres_coeur->identifiants[TEXTURE_COEUR],x+infos_sdl->w + 15, y_coeur+2,20,20);
 		sprintf(infos,"%d",joueur->vie);
-		SDL_Color color_vie = {0,0,255,0};
+		SDL_Color color_vie = {50,52,238,0};
 
 		SDL_Surface *nbVie = TTF_RenderText_Blended(police_infos_joueur,infos,color_vie);
 
