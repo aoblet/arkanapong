@@ -7,6 +7,7 @@
 #include "joueur/barre.h"
 #include "briques/bonus.h"
 #include "briques/brique.h"
+#include "textures/textures.h"
 
 Brique * initBrique(float xPos, float yPos, float xSize, float ySize, Balle ** balles){
 	Brique * b = (Brique*)malloc(sizeof(Brique));
@@ -47,31 +48,8 @@ void setTextureBrique(Brique ** brique, GLuint id_texture){
 
 void dessinBrique(Brique * brique){
 	if(brique != NULL){
-
 		glColor3ub(255,255,255);
-		float xGauche 	= brique->xPos-(brique->xSize/2);
-		float xDroit 	= brique->xPos+(brique->xSize/2);
-		float yBas		= brique->yPos-(brique->ySize/2);
-		float yHaut		= brique->yPos+(brique->ySize/2);
-
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, brique->texture);
-		glBegin(GL_QUADS);
-		glTexCoord2f(0,1);
-		glVertex2f(xGauche,yBas);
-
-		glTexCoord2f(1,1);
-		glVertex2f(xDroit,yBas);
-
-		glTexCoord2f(1,0);
-		glVertex2f(xDroit,yHaut);
-
-		glTexCoord2f(0,0);
-		glVertex2f(xGauche,yHaut);
-		glEnd();
-
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glDisable(GL_TEXTURE_2D);
+		dessinTexture(brique->texture,brique->xPos,brique->yPos,brique->xSize,brique->ySize);
 	}
 }
 

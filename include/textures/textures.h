@@ -48,10 +48,11 @@
 #define NB_TEXTURES_MENU				26
 
 
-//barre
+//barre (&& coeur : eviter de recréer un tableau que pour une seule texture)
 #define TEXTURE_BARRE_BAS 0
 #define TEXTURE_BARRE_HAUT 1
-#define NB_TEXTURES_BARRES 2
+#define TEXTURE_COEUR 2
+#define NB_TEXTURES_BARRES_COEUR 3
 
 
 #define NB_TEXTURES_MAX 26
@@ -66,9 +67,10 @@ typedef struct{
 
 void loadTexturesBriques(Textures * textures, char * theme);
 void loadTexturesMenu(Textures * textures);
-void loadTexturesBarres(Textures * textures, char * menu);
+void loadTexturesBarresCoeur(Textures * textures, char * menu);
 void loadTexture(GLuint * id, char * chemin_fichier);
 void detruireTextures(Textures * textures);
 void dessinSurfaceInfos(SDL_Surface * surface, float xPos,float yPos);
+void dessinTexture(GLuint texture,float xPos, float yPos, float xSize, float ySize);
 
 #endif

@@ -8,6 +8,7 @@
 #include "balle/balle.h"
 #include "joueur/barre.h"
 #include "briques/bonus.h"
+#include "textures/textures.h"
 #ifndef CAR_MAX
 #define CAR_MAX 100
 #endif
@@ -31,7 +32,7 @@ void handleBarreIAJ2(Balle * balle_j1, Balle * balle_j2, Joueur * j1, Joueur * j
 void addBonusJoueur(Joueur * joueur, int compteur_frame, int nom_bonus, float value);
 void updateBonusJoueur(Joueur * joueur, float size_x_barre_default,  float size_y_barre_default, float x_vitesse_barre_default);
 void detruireBonusJoueur(Joueur * joueur);
-void dessinInfosJoueur(int nb_joueur, Joueur * joueur, TTF_Font * police_infos_joueur, int r, int v, int b, float x, float y, int extremite);
+void dessinInfosJoueur(int nb_joueur,Joueur * joueur, TTF_Font * police_infos_joueur, Textures * barres_coeur, int r, int v, int b, float x, float y, int extremite);
 void dessinSurfaceInfos(SDL_Surface * surface, float xPos,float yPos);
 
 #endif

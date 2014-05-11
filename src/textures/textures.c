@@ -121,8 +121,8 @@ void loadTexturesMenu(Textures * textures){
 
 }
 
-void loadTexturesBarres(Textures * textures, char * theme){
-	textures->nb_textures = NB_TEXTURES_BARRES;
+void loadTexturesBarresCoeur(Textures * textures, char * theme){
+	textures->nb_textures = NB_TEXTURES_BARRES_COEUR;
 
 	char theme_string_safe[50];
 	strcpy(theme_string_safe,theme);
@@ -135,6 +135,7 @@ void loadTexturesBarres(Textures * textures, char * theme){
 
 	loadTexture( &(textures->identifiants[TEXTURE_BARRE_BAS]) , 	strcat(strcpy(chemin_barres_copy,chemin_barres),"bas/1.png"));
 	loadTexture( &(textures->identifiants[TEXTURE_BARRE_HAUT]) ,	strcat(strcpy(chemin_barres_copy,chemin_barres),"haut/1.png"));
+	loadTexture( &(textures->identifiants[TEXTURE_COEUR]) ,			"../img/utils/heart.png");
 }
 
 void detruireTextures(Textures * textures){
@@ -168,6 +169,30 @@ void dessinSurfaceInfos(SDL_Surface * surface, float xPos,float yPos){
 	glEnd();
 	glDeleteTextures(1,&texture);
 	glDisable(GL_BLEND);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
+}
+void dessinTexture(GLuint texture,float xPos, float yPos, float xSize, float ySize){
+	glEnable(GL_TEXTURE_2D );
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glBegin(GL_QUADS);
+	glTexCoord2f(0,1);
+	glVertex2f(xPos-xSize/2,yPos-(ySize/2));
+
+	glTexCoord2f(1,1);
+	glVertex2f(xPos+(xSize/2),yPos-(ySize/2));
+
+	glTexCoord2f(1,0);
+	glVertex2f(xPos+(xSize/2),yPos+(ySize/2));
+
+	glTexCoord2f(0,0);
+	glVertex2f(xPos-(xSize/2),yPos+(ySize/2));
+	glEnd();
+	glDisable(GL_BLEND);
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
 }

@@ -64,6 +64,7 @@ int main(int argc, char * argv []){
   	SDL_WM_SetCaption("Arkana-Pong", NULL);
 
 	int game = 1;
+	int exit_arkana=0;
 	do{
 	  	char theme[50],level[50],mode_jeu[50];
 		Item_menu menu[6];
@@ -80,7 +81,8 @@ int main(int argc, char * argv []){
 
 		/********* MENU ********/
 	
-	  	int loop=1,indice_fleches_verticales=0,indice_fleches_horizontales=0,exit_arkana=0;
+	  	int loop=1,indice_fleches_verticales=0,indice_fleches_horizontales=0,playmusic=1;
+	  	exit_arkana=0;
 	  	while(loop){
 			glClear(GL_COLOR_BUFFER_BIT);
 			drawItem(&(menu[WALLPAPER]),ABCISSE_REPERE_MAX_GAME,ORDONNE_REPERE_MAX_GAME);
@@ -99,7 +101,7 @@ int main(int argc, char * argv []){
 		    		exit_arkana=1;
 		        	break;
 		      	}
-		      
+
 		      	switch(e.type) {
 		        	case SDL_MOUSEBUTTONUP:
 		          
@@ -113,11 +115,24 @@ int main(int argc, char * argv []){
 
 		        	case SDL_KEYDOWN:
 		      	  		switch(e.key.keysym.sym){
+		      	  			case 'm' :
+		      	    			if(playmusic){
+		      	    				playmusic=0;
+		      	    				Mix_PauseMusic();
+		      	    			}
+		      	    			else{
+		      	    				playmusic=1;
+		      	    				Mix_ResumeMusic();
+		      	    			}
+		      	    		break;
+		      	    		case SDLK_ESCAPE : 
+		        		  		loop = 0;
+		        		  		exit_arkana=1;
+		        			break;
 
 		            		case SDLK_UP:
 		            			indice_fleches_verticales--;
 		            			handleMenu(&indice_fleches_verticales,&indice_fleches_horizontales,	menu,5); // on ne compte pas le dernier(wallpaper)
-
 		            		break;
 
 		            		case SDLK_DOWN:
@@ -181,24 +196,26 @@ int main(int argc, char * argv []){
 		  	Mix_VolumeMusic(50);
 		  	Mix_FadeInMusic(musique_game,-1,4000);
 
+		  	playmusic=1;
+
 			/********* JEU ********/
 			/**********************/
 
 		  	/******** INIT SCREEN & JOUEUR *******/
-		  	Textures textures_barres;
-		  	loadTexturesBarres(&textures_barres,theme);
+		  	Textures textures_barres_coeur;
+		  	loadTexturesBarresCoeur(&textures_barres_coeur,theme);
 
 		  	float default_taille_barre_x = 80, default_taille_barre_y = 10, x_vitesse_barre_default = 5, norme_vitesse_balle_default = 3;
 		  	if(!strcmp(theme,"mario"))
 		  		default_taille_barre_y = 20;
 
 		  	Barre barre_joueur1 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,100,187,205);
-		  	barre_joueur1.texture = textures_barres.identifiants[TEXTURE_BARRE_BAS];
+		  	barre_joueur1.texture = textures_barres_coeur.identifiants[TEXTURE_BARRE_BAS];
 		  	Joueur j1 = initJoueur("Alexis","Oblet",10,&barre_joueur1);
 		  	Balle balle_joueur1 = initBalle(0,-ORDONNE_REPERE_MAX_GAME+30,0,0,5,151,187,205,&j1);
 
 		  	Barre barre_joueur2 = initBarre(0,0,default_taille_barre_x,default_taille_barre_y,x_vitesse_barre_default,255,204,0);
-		  	barre_joueur2.texture = textures_barres.identifiants[TEXTURE_BARRE_HAUT];
+		  	barre_joueur2.texture = textures_barres_coeur.identifiants[TEXTURE_BARRE_HAUT];
 		  	Joueur j2 = initJoueur("Machine","Invincible",10,&barre_joueur2);
 		  	Balle balle_joueur2 = initBalle(0,ORDONNE_REPERE_MAX_GAME-30,0,0,5,255,204,0,&j2);
 
@@ -238,8 +255,8 @@ int main(int argc, char * argv []){
 
 			    glColor3ub(255,255,255); // init
 			    dessinWallpaper(texture_wallpaper,ABCISSE_REPERE_MAX_GAME,ORDONNE_REPERE_MAX_GAME);
-			    dessinInfosJoueur(2,&j2,police_infos_joueur,230,123,80,-ABCISSE_REPERE_MAX_GLOBAL,ORDONNE_REPERE_MAX_GLOBAL,-1);
-			    dessinInfosJoueur(1,&j1,police_infos_joueur,125,255,169,ABCISSE_REPERE_MAX_GLOBAL,-ORDONNE_REPERE_MAX_GLOBAL,1);
+			    dessinInfosJoueur(2,&j2,police_infos_joueur,&textures_barres_coeur,230,123,80,-ABCISSE_REPERE_MAX_GLOBAL,ORDONNE_REPERE_MAX_GLOBAL,-1);
+			    dessinInfosJoueur(1,&j1,police_infos_joueur,&textures_barres_coeur,125,255,169,ABCISSE_REPERE_MAX_GLOBAL,-ORDONNE_REPERE_MAX_GLOBAL,1);
 
 			    dessinBalle(&balle_joueur1,ABCISSE_REPERE_MAX_GAME,ORDONNE_REPERE_MAX_GAME);
 			   	dessinBalle(&balle_joueur2,ABCISSE_REPERE_MAX_GAME,ORDONNE_REPERE_MAX_GAME);
@@ -348,7 +365,16 @@ int main(int argc, char * argv []){
 
 			            		case SDLK_UP:
 			            		break;
-
+			            		case 'm' :
+			      	    			if(playmusic){
+			      	    				playmusic=0;
+			      	    				Mix_PauseMusic();
+			      	    			}
+			      	    			else{
+			      	    				playmusic=1;
+			      	    				Mix_ResumeMusic();
+			      	    			}
+			      	    		break; 
 			            		case SDLK_DOWN:
 			           			break;
 			      	    		
@@ -385,7 +411,7 @@ int main(int argc, char * argv []){
 			}
 		
 			detruireTextures(&textures_briques);
-			detruireTextures(&textures_barres);
+			detruireTextures(&textures_barres_coeur);
 			detruireBriques(arrayBrique,nbBriques);
 		 	glBindTexture(GL_TEXTURE_2D,0);
 		    glDeleteTextures(1,&texture_wallpaper);
@@ -393,7 +419,7 @@ int main(int argc, char * argv []){
 			TTF_CloseFont(police_infos_joueur);
 		}
 
-	}while(game);
+	}while(game && !exit_arkana);
 
 	TTF_Quit();
     Mix_CloseAudio();
