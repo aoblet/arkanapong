@@ -62,10 +62,10 @@ int main(int argc, char * argv []){
 	int exit_arkana=0;
 	int playmusic=1;
 
-	if(Mix_Init(MIX_INIT_OGG) != MIX_INIT_OGG)
+	/*if(Mix_Init(MIX_INIT_OGG) != MIX_INIT_OGG)
   	 	printf("INIT OGG FAIL : %s", Mix_GetError());
   	 else
-  	 	printf("INIT OGG ok\n");
+  	 	printf("INIT OGG ok\n");*/
   
 	if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1){
   	 	printf("%s", Mix_GetError());
@@ -446,7 +446,7 @@ int main(int argc, char * argv []){
 
 	TTF_Quit();
     Mix_CloseAudio();
-    Mix_Quit();
+    //Mix_Quit();
   	SDL_Quit(); 
 	return EXIT_SUCCESS;
 }
