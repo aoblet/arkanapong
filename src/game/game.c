@@ -27,13 +27,18 @@ void stopGame(Barre * barrej1, Barre * barrej2, Balle * ballej1, Balle * ballej2
 }
 
 void initVitesseBalles(Balle * ballej1, Balle * ballej2){
-	setNormeVitesseBalle(ballej1,1);
-	setNormeVitesseBalle(ballej2,1);
 	srand(time(NULL));
 
-	setAngleVitesseBalle(ballej1,fmod(rand(),M_PI));
-	rand();
-	setAngleVitesseBalle(ballej2,-fmod(rand(),M_PI));
+	if(ballej1 != NULL){
+		setNormeVitesseBalle(ballej1,1);
+		setAngleVitesseBalle(ballej1,fmod(rand(),M_PI));
+	}
+	if(ballej2 != NULL){
+		setNormeVitesseBalle(ballej2,1);
+		rand();
+		setAngleVitesseBalle(ballej2,-fmod(rand(),M_PI));
+	}
+
 }
 
 void initVitesseBarres(Barre * barrej1, Barre * barrej2){

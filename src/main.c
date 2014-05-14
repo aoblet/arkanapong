@@ -337,26 +337,38 @@ int main(int argc, char * argv []){
 					int perte_potentiel_balle1 = handleBalleBorder(&balle_joueur1, ABCISSE_REPERE_MAX_GAME, ORDONNE_REPERE_MAX_GAME);
 					if(perte_potentiel_balle1 == -1){
 						j1.vie -=1;
-						partie_stopped = 1;
+						setBalleJ1ToScreen(&balle_joueur1,&barre_joueur1);
+						initVitesseBalles(&balle_joueur1,NULL);
+
+						//partie_stopped = 1;
 					}
 					else if(perte_potentiel_balle1 == -2){
+						setBalleJ2ToScreen(&balle_joueur2,&barre_joueur2);
+						setBalleJ1ToScreen(&balle_joueur1,&barre_joueur1);
+						initVitesseBalles(&balle_joueur1,NULL);
+
 						j2.vie -=1;
-						partie_stopped = 1;
+						//partie_stopped = 1;
 					}
 					
 					int perte_potentiel_balle2 = handleBalleBorder(&balle_joueur2, ABCISSE_REPERE_MAX_GAME, ORDONNE_REPERE_MAX_GAME);
 					if(perte_potentiel_balle2 == -1){
 						j1.vie -=1;
-						partie_stopped = 1;
+						setBalleJ1ToScreen(&balle_joueur1,&barre_joueur1);
+						setBalleJ2ToScreen(&balle_joueur2,&barre_joueur2);
+						initVitesseBalles(NULL,&balle_joueur2);
+						//partie_stopped = 1;
 					}
 					else if(perte_potentiel_balle2 == -2){
+						setBalleJ2ToScreen(&balle_joueur2,&barre_joueur2);
+						initVitesseBalles(NULL,&balle_joueur2);
+
 						j2.vie -=1;
-						partie_stopped = 1;
+						//partie_stopped = 1;
 					}
 					
-					if(partie_stopped){
-						if(j1.vie == 0 || j2.vie==0)
-							end = 1;
+					if(j1.vie == 0 || j2.vie==0){
+						end = 1;
 						stopGame(&barre_joueur1, &barre_joueur2, &balle_joueur1, &balle_joueur2);
 					}
 				}
